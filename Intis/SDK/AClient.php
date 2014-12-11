@@ -77,7 +77,7 @@ abstract class AClient {
                 $params[$key] = $value;
             }
         }
-        $sig = $this->GetSignature($params);
+        $sig = $this->getSignature($params);
         $params['signature'] = $sig;
 
         return $params;
