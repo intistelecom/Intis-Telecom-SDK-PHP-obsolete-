@@ -24,7 +24,7 @@ class DeliveryStatus{
     }
     
     /**
-     * Получение Message ID
+     * Getting message ID
      *
      * @return integer
      */
