@@ -1,7 +1,9 @@
 <?php
 
 spl_autoload_register(function ($class) {
-    $path = './../' . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
-    include $path;
+    if($class != 'PHPUnit_Extensions_Story_TestCase') {
+        $path = './../' . str_replace('\\', '/', $class) . '.php';
+        include $path;
+    }
 });
 

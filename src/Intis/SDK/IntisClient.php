@@ -2,8 +2,6 @@
 
 namespace Intis\SDK;
 
-use Intis\SDK\IClient;
-use Intis\SDK\AClient;
 use Intis\SDK\Entity\Balance;
 use Intis\SDK\Entity\Originator;
 use Intis\SDK\Entity\PhoneBase;
