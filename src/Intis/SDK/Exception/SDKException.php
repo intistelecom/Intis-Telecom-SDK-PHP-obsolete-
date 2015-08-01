@@ -1,5 +1,5 @@
 <?php
-namespace Intis\SDK;
+namespace Intis\SDK\Exception;
 
 /**
  * Class SDKException

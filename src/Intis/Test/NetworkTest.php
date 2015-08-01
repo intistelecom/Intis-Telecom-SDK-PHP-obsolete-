@@ -14,27 +14,28 @@ require  '../../../vendor/autoload.php';
 use Intis\SDK\IntisClient;
 
 
-class BalanceTest extends \PHPUnit_Framework_TestCase {
+class NetworkTest extends \PHPUnit_Framework_TestCase {
 
     private $login = 'rso';
     private $apiKey = 'afa1748a75c0d796079d681e25d271a2c7916327';
     private $apiHost = 'http://dev.sms16.ru/get/';
 
-    public function test_getBalance(){
+    public function test_getNetworkByPhone(){
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
-        $balance = $client->getBalance();
+        $phone = '79808008080';
+        $network = $client->getNetworkByPhone($phone);
 
-        $amount = $balance->getAmount();
-        $currency = $balance->getCurrency();
+        $network->getTitle();
 
-        $this->assertInstanceOf('Intis\SDK\Entity\Balance',$balance);
+        $this->assertInstanceOf('Intis\SDK\Entity\Network',$network);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\BalanceException
+     * @expectedException Intis\SDK\Exception\NetworkException
      */
-    public function test_getBalanceException(){
+    public function test_getNetworkByPhoneException(){
         $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);
-        $client->getBalance();
+        $phone = '79808008080';
+        $client->getNetworkByPhone($phone);
     }
 }

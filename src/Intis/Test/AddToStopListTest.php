@@ -3,9 +3,8 @@
  * Created by PhpStorm.
  * User: Sergey
  * Date: 30.07.2015
- * Time: 21:52
+ * Time: 22:51
  */
-
 
 namespace Intis\Test;
 
@@ -13,28 +12,27 @@ require  '../../../vendor/autoload.php';
 
 use Intis\SDK\IntisClient;
 
-
-class BalanceTest extends \PHPUnit_Framework_TestCase {
-
+class AddToStopListTest extends \PHPUnit_Framework_TestCase {
     private $login = 'rso';
     private $apiKey = 'afa1748a75c0d796079d681e25d271a2c7916327';
     private $apiHost = 'http://dev.sms16.ru/get/';
 
-    public function test_getBalance(){
+    public function test_addTemplate(){
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
-        $balance = $client->getBalance();
+        $phone = '79009009090';
 
-        $amount = $balance->getAmount();
-        $currency = $balance->getCurrency();
+        $result = $client->addToStopList($phone);
 
-        $this->assertInstanceOf('Intis\SDK\Entity\Balance',$balance);
+        $this->assertNotEquals(0, $result);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\BalanceException
+     * @expectedException Intis\SDK\Exception\AddToStopListException
      */
-    public function test_getBalanceException(){
+    public function test_addTemplateException(){
         $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);
-        $client->getBalance();
+        $phone = '79009009090';
+
+        $result = $client->addToStopList($phone);
     }
 }

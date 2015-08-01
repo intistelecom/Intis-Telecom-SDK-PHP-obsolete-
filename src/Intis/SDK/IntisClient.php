@@ -217,17 +217,11 @@ class IntisClient extends AClient implements IClient {
         $dailyStats = array();
         foreach ($content as $row1) {
             $stats = array();
-            foreach ($row1 as $day => $one) {
-                foreach ($one as $row2) {
-                    foreach ($row2 as $state => $values) {
-                        foreach ($values as $value) {
-                            $stats[] = new Stats($state, $value);
-                        }
-                    }
-                }
-
-                $dailyStats[] = new DailyStats($day, $stats);
+            foreach ($row1->stats as $one) {
+                $stats[] = new Stats($one);
             }
+
+            $dailyStats[] = new DailyStats($row1->date, $stats);
         }
 
         return $dailyStats;

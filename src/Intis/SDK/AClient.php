@@ -1,6 +1,7 @@
 <?php
 namespace Intis\SDK;
 
+use Intis\SDK\Exception\SDKException;
 /**
  * Class AClient
  *

@@ -17,6 +17,11 @@ class DeliveryStatus{
      * @var string message status
      */
     private $messageStatus;
+
+    /**
+     * @var string time of message
+     */
+    private $createdAt;
     
     public function __construct($messageId, $messageStatus) {
         $this->messageId = $messageId;
@@ -39,5 +44,14 @@ class DeliveryStatus{
      */
     public function getMessageStatus() {
         return MessageState::parse($this->messageStatus);
+    }
+
+    /**
+     * Getting a time of message
+     *
+     * @return string
+     */
+    public function getCreatedAt(){
+        return $this->createdAt;
     }
 }

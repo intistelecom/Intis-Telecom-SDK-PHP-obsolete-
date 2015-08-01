@@ -44,7 +44,7 @@ class PhoneBasesTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Intis\SDK\SDKException
+     * @expectedException Intis\SDK\Exception\PhoneBaseException
      */
     public function test_getPhoneBasesException(){
         $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);

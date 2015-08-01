@@ -26,8 +26,8 @@ class Stats{
      */
     private $count;
     
-    public function __construct($state, $obj) {
-        $this->state = $state;
+    public function __construct($obj) {
+        $this->state = $obj->status;
         $this->cost = $obj->cost;
         $this->count = $obj->parts;
     }

@@ -24,7 +24,7 @@ class AddTemplateTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Intis\SDK\SDKException
+     * @expectedException Intis\SDK\Exception\AddTemplateException
      */
     public function test_addTemplateException(){
         $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);
