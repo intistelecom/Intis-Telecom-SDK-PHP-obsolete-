@@ -23,9 +23,10 @@ class DeliveryStatus{
      */
     private $createdAt;
     
-    public function __construct($messageId, $messageStatus) {
-        $this->messageId = $messageId;
-        $this->messageStatus = $messageStatus;
+    public function __construct($obj) {
+        $this->messageId = $obj->messageId;
+        $this->messageStatus = $obj->status;
+        $this->createdAt = $obj->time;
     }
     
     /**

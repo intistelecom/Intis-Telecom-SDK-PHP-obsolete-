@@ -15,13 +15,13 @@ use Intis\SDK\IntisClient;
 
 
 class DailyStatsByMonthTest extends \PHPUnit_Framework_TestCase {
-
-    private $login = 'rso';
-    private $apiKey = 'afa1748a75c0d796079d681e25d271a2c7916327';
-    private $apiHost = 'http://dev.sms16.ru/get/';
+    private $login = 'your api login';
+    private $apiKey = 'your api key here';
+    private $apiHost = 'http://api.host.com/get/';
 
     public function test_getDailyStatsByMonth(){
-        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
+        $connector = new LocalApiConnector($this->getData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $year = 2014;
         $month = 10;
 
@@ -46,10 +46,25 @@ class DailyStatsByMonthTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Intis\SDK\Exception\DailyStatsException
      */
     public function test_getDailyStatsByMonthException(){
-        $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);
+        $connector = new LocalApiConnector($this->getErrorData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $year = 2014;
         $month = 10;
 
         $client->getDailyStatsByMonth($year, $month);
+    }
+
+    private function getData(){
+        $result =
+            '[{"date":"2014-10-02","stats":[{"status":"deliver","cost":"1.000","parts":"2"},{"status":"not_deliver","cost":"0.500","parts":"1"}]},'.
+            '{"date":"2014-10-13","stats":[{"status":"deliver","cost":"161.850","parts":"358"},{"status":"expired","cost":"1.650","parts":"4"},{"status":"not_deliver","cost":"87.700","parts":"198"}]},'.
+            '{"date":"2014-10-31","stats":[{"status":"not_deliver","cost":"211.200","parts":"459"},{"status":"deliver","cost":"327.950","parts":"712"}]}]';
+
+        return json_decode($result);
+    }
+
+    private function getErrorData(){
+        $result = '{"error":4}';
+        return json_decode($result);
     }
 }

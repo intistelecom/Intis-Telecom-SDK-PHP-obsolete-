@@ -24,6 +24,12 @@ abstract class AClient {
      */
     protected $apiHost;
 
+    protected  $apiConnector;
+
+    public function __construct(IApiConnector $apiConnector){
+         $this->apiConnector = $apiConnector;
+    }
+
     /**
      * Getting content using parameters and name of API script
      *
@@ -36,7 +42,7 @@ abstract class AClient {
         $all = $this->getParameters($parameters);
 
         $url = $this->apiHost . $scriptName . ".php?" . http_build_query($all);
-        $result = $this->getContentFromApi($url);
+        $result = $this->apiConnector->getContentFromApi($url);
         $this->checkException($result);
 
         return $result;
@@ -48,7 +54,8 @@ abstract class AClient {
      * @return string
      */
     private function getTimestamp() {
-        return file_get_contents($this->apiHost . 'timestamp.php');
+        $url = $this->apiHost . 'timestamp.php';
+        return $this->apiConnector->getTimestampFromApi($url);
     }
 
     /**
@@ -96,24 +103,6 @@ abstract class AClient {
         $str = implode('', $params) . $this->apiKey;
 
         return md5($str);
-    }
-
-    /**
-     * Getting data from API.
-     *
-     * @param string $url API address
-     * @return bool|mixed|string
-     */
-    private function getContentFromApi($url) {
-        $result = file_get_contents($url);
-//        var_dump($result); exit;
-        if ($result === false)
-            return false;
-        $result = json_decode($result);
-        if (!$result)
-            return false;
-
-        return $result;
     }
 
     /**

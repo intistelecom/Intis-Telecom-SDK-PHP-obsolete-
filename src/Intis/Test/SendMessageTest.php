@@ -15,14 +15,14 @@ use Intis\SDK\IntisClient;
 
 
 class SendMessageTest extends \PHPUnit_Framework_TestCase {
-
-    private $login = 'rso';
-    private $apiKey = 'afa1748a75c0d796079d681e25d271a2c7916327';
-    private $apiHost = 'http://dev.sms16.ru/get/';
+    private $login = 'your api login';
+    private $apiKey = 'your api key here';
+    private $apiHost = 'http://api.host.com/get/';
 
     public function test_sendMessage(){
-        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
-        $phone = array('79009009090','79009009091');
+        $connector = new LocalApiConnector($this->getData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
+        $phone = array('79802503672','79009009091');
         /*
          * || $phone = '79009009090,79009009091,79009009092'
          */
@@ -31,11 +31,17 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
         $messages = $client->sendMessage($phone, $originator, $text);
 
         foreach($messages as $one){
-            $one->getPhone();
-            $one->getMessageId();
-            $one->getCost();
-            $one->getMessagesCount();
-            $one->getError();
+            if($one->isOk()) {
+                $one->getPhone();
+                $one->getMessageId();
+                $one->getCost();
+                $one->getMessagesCount();
+            }
+            else{
+                $one->getMessage();
+                $one->getCode();
+            }
+
         }
 
         $this->assertInternalType('array',$messages);
@@ -46,8 +52,9 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException Intis\SDK\Exception\MessageSendingResultException
      */
-    public function test_getBalanceException(){
-        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
+    public function test_sendMessageException(){
+        $connector = new LocalApiConnector($this->getErrorData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $phone = array('79009009090','79009009091');
         /*
          * || $phone = '79009009090,79009009091,79009009092'
@@ -55,5 +62,15 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
         $originator = 'test';
         $text = 'test message';
         $client->sendMessage($phone, $originator, $text);
+    }
+
+    private function getData(){
+        $result = '{"79802503672":{"error":"0","id_sms":"4384607771347164730001","cost":1,"count_sms":1,"sender":"smstest","network":" Russia MTC","ported":0},"79009009091":{"error":31}}';
+        return json_decode($result);
+    }
+
+    private function getErrorData(){
+        $result = '{"error":4}';
+        return json_decode($result);
     }
 }

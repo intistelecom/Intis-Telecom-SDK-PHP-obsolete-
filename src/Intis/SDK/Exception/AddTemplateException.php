@@ -2,8 +2,8 @@
 
 namespace Intis\SDK\Exception;
 
-class AddTemplateException extends SDKException{
+class AddTemplateException extends \Exception{
     public function __construct($code){
-        parent::__construct(self::$messages[$code], $code);
+        parent::__construct(SDKException::$messages[$code], $code);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Intis\SDK\Exception;
 
-class MessageSendingResultException extends SDKException{
+class MessageSendingResultException extends \Exception{
     public function __construct($code){
-        parent::__construct(self::$messages[$code], $code);
+        parent::__construct(SDKException::$messages[$code], $code);
     }
 }

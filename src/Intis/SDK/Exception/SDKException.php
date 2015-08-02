@@ -41,7 +41,13 @@ class SDKException extends \Exception{
         26 => 'There are no numbers in the list',
         27 => 'There are no valid numbers',
         28 => 'Initial date is not specified',
-        29 => 'Final date is not specified'
+        29 => 'Final date is not specified',
+        30 => "Wrong or empty date (format: YYYY-MM-DD)",
+        31 => "Unavailable direction",
+        32 => "Low balance",
+        33 => "Wrong phone number",
+        34 => "Phone is in the global stop-list",
+        35 => "Billing failed"
     );
 
     public function __construct($code){

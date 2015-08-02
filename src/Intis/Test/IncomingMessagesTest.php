@@ -14,15 +14,15 @@ require  '../../../vendor/autoload.php';
 use Intis\SDK\IntisClient;
 
 
-class OriginatorsTest extends \PHPUnit_Framework_TestCase {
+class IncomingMessagesTest extends \PHPUnit_Framework_TestCase {
+    private $login = 'your api login';
+    private $apiKey = 'your api key here';
+    private $apiHost = 'http://api.host.com/get/';
 
-    private $login = 'rso';
-    private $apiKey = 'afa1748a75c0d796079d681e25d271a2c7916327';
-    private $apiHost = 'http://dev.sms16.ru/get/';
-
-    public function test_getOriginators(){
-        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
-        $date = '2014-11-25';
+    public function test_getIncomingMessages(){
+        $connector = new LocalApiConnector($this->getData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
+        $date = '2015-04-01';
         $result = $client->getIncomingMessages($date);
 
         foreach($result as $one){
@@ -41,9 +41,20 @@ class OriginatorsTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException Intis\SDK\Exception\IncomingMessageException
      */
-    public function test_getOriginatorsException(){
-        $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);
+    public function test_getIncomingMessagesException(){
+        $connector = new LocalApiConnector($this->getErrorData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $date = '2014-11-25';
         $client->getIncomingMessages($date);
+    }
+
+    private function getData(){
+        $result = '{"75396":{"date":"2015-04-01 14:01:24","sender":"79099004898","prefix":"","text":"TEST"},"75397":{"date":"2015-04-01 22:31:22","sender":"79033145252","prefix":"","text":"111111111"},"75398":{"date":"2015-04-01 22:37:13","sender":"79099004898","prefix":"","text":"TEST INCOMING"},"75399":{"date":"2015-04-01 22:39:33","sender":"79033145252","prefix":"","text":"2222223"}}';
+        return json_decode($result);
+    }
+
+    private function getErrorData(){
+        $result = '{"error":4}';
+        return json_decode($result);
     }
 }

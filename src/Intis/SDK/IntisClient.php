@@ -8,7 +8,9 @@ use Intis\SDK\Entity\PhoneBase;
 use Intis\SDK\Entity\PhoneBaseItem;
 use Intis\SDK\Entity\DeliveryStatus;
 use Intis\SDK\Entity\StopList;
-use Intis\SDK\Entity\MessageSendingResult;
+use Intis\SDK\Entity\MessageSending;
+use Intis\SDK\Entity\MessageSendingSuccess;
+use Intis\SDK\Entity\MessageSendingError;
 use Intis\SDK\Entity\Template;
 use Intis\SDK\Entity\DailyStats;
 use Intis\SDK\Entity\Stats;
@@ -16,6 +18,21 @@ use Intis\SDK\Entity\HLRResponse;
 use Intis\SDK\Entity\HLRStatItem;
 use Intis\SDK\Entity\Network;
 use Intis\SDK\Entity\IncomingMessage;
+use Intis\SDK\Exception\AddTemplateException;
+use Intis\SDK\Exception\AddToStopListException;
+use Intis\SDK\Exception\BalanceException;
+use Intis\SDK\Exception\DailyStatsException;
+use Intis\SDK\Exception\DeliveryStatusException;
+use Intis\SDK\Exception\HLRResponseException;
+use Intis\SDK\Exception\HLRStatItemException;
+use Intis\SDK\Exception\IncomingMessageException;
+use Intis\SDK\Exception\MessageSendingResultException;
+use Intis\SDK\Exception\NetworkException;
+use Intis\SDK\Exception\OriginatorException;
+use Intis\SDK\Exception\PhoneBaseException;
+use Intis\SDK\Exception\PhoneBaseItemException;
+use Intis\SDK\Exception\StopListException;
+use Intis\SDK\Exception\TemplateException;
 
 
 /**
@@ -33,8 +50,13 @@ class IntisClient extends AClient implements IClient {
      * @param string $login user login
      * @param string $apiKey user API key
      * @param string $apiHost API address
+     * @param IApiConnector $apiConnector
      */
-    public function __construct($login, $apiKey, $apiHost) {
+    public function __construct($login, $apiKey, $apiHost, IApiConnector $apiConnector = null) {
+        if($apiConnector)
+            parent::__construct($apiConnector);
+        else
+            parent::__construct(new HttpApiConnector());
         $this->login = $login;
         $this->apiKey = $apiKey;
         $this->apiHost = $apiHost;
@@ -43,46 +65,63 @@ class IntisClient extends AClient implements IClient {
     /**
      * Getting user balance
      *
+     * @throws BalanceException
      * @return Balance
      */
     public function getBalance() {
-        $content = $this->getContent('balance');
+        try {
+            $content = $this->getContent('balance');
+            $balance = new Balance($content);
 
-        $balance = new Balance($content);
-
-        return $balance;
+            return $balance;
+        }
+        catch(\Exception $e){
+            throw new BalanceException($e->getCode());
+        }
     }
 
     /**
      * Getting all user lists
      *
+     * @throws PhoneBaseException
      * @return array
      */
     public function getPhoneBases() {
-        $content = $this->getContent('base');
+        try {
+            $content = $this->getContent('base');
 
-        $phoneBases = array();
-        foreach ($content as $key => $bgs) {
-            $phoneBases[] = new PhoneBase($key, $bgs);
+            $phoneBases = array();
+            foreach ($content as $key => $bgs) {
+                $phoneBases[] = new PhoneBase($key, $bgs);
+            }
+
+            return $phoneBases;
         }
-
-        return $phoneBases;
+        catch(\Exception $e){
+            throw new PhoneBaseException($e->getCode());
+        }
     }
 
     /**
      * Getting all user sender names
      *
+     * @throws OriginatorException
      * @return array array of senders with its statuses
      */
     public function getOriginators() {
-        $content = $this->getContent('senders');
+        try {
+            $content = $this->getContent('senders');
 
-        $originators = array();
-        foreach ($content as $originator => $state) {
-            $originators[] = new Originator($originator, $state);
+            $originators = array();
+            foreach ($content as $originator => $state) {
+                $originators[] = new Originator($originator, $state);
+            }
+
+            return $originators;
         }
-
-        return $originators;
+        catch(\Exception $e){
+            throw new OriginatorException($e->getCode());
+        }
     }
 
     /**
@@ -90,38 +129,52 @@ class IntisClient extends AClient implements IClient {
      *
      * @param int $baseId List ID
      * @param int $page Page of list
+     *
+     * @throws PhoneBaseItemException
      * @return array
      */
     public function getPhoneBaseItems($baseId, $page = 1) {
-        $content = $this->getContent('phone', array('base' => $baseId, 'page' => $page));
+        try {
+            $content = $this->getContent('phone', array('base' => $baseId, 'page' => $page));
 
-        $items = array();
-        foreach ($content as $phone => $item) {
-            $items[] = new PhoneBaseItem($phone, $item);
+            $items = array();
+            foreach ($content as $phone => $item) {
+                $items[] = new PhoneBaseItem($phone, $item);
+            }
+
+            return $items;
         }
-
-        return $items;
+        catch(\Exception $e){
+            throw new PhoneBaseItemException($e->getCode());
+        }
     }
 
     /**
      * Getting message status
      *
      * @param int $messageId Message ID
+     *
+     * @throws DeliveryStatusException
      * @return array
      */
     public function getDeliveryStatus($messageId) {
-        if (!is_array($messageId))
-            $messageId = array($messageId);
-        $str = implode(',', $messageId);
+        try {
+            if (!is_array($messageId))
+                $messageId = array($messageId);
+            $str = implode(',', $messageId);
 
-        $content = $this->getContent('status', array('state' => $str));
+            $content = $this->getContent('status', array('state' => $str));
 
-        $deliveryStatus = array();
-        foreach ($content as $messageId => $messageStatus) {
-            $deliveryStatus[] = new DeliveryStatus($messageId, $messageStatus);
+            $deliveryStatus = array();
+            foreach ($content as $messageStatus) {
+                $deliveryStatus[] = new DeliveryStatus($messageStatus);
+            }
+
+            return $deliveryStatus;
         }
-
-        return $deliveryStatus;
+        catch(\Exception $e){
+            throw new DeliveryStatusException($e->getCode());
+        }
     }
 
     /**
@@ -130,63 +183,107 @@ class IntisClient extends AClient implements IClient {
      * @param array|string $phone phone number(s)
      * @param string $originator sender name
      * @param string $text sms text
+     *
+     * @throws MessageSendingResultException
      * @return array
      */
     public function sendMessage($phone, $originator, $text) {
-        if (!is_array($phone))
-            $phone = array($phone);
-        $str = implode(',', $phone);
+        try {
+            if (!is_array($phone))
+                $phone = array($phone);
+            $str = implode(',', $phone);
 
-        $content = $this->getContent('send', array('phone' => $str, 'sender' => $originator, 'text' => $text));
+            $content = $this->getContent('send', array('phone' => $str, 'sender' => $originator, 'text' => $text));
 
-        $messages = array();
-        foreach ($content as $message) {
-            $messages[] = new MessageSendingResult($message);
+            $messages = array();
+            foreach ($content as $phoneResult => $message) {
+                $result = new MessageSending($phoneResult, $message);
+                if($result->getError() == 0){
+                    $success = new MessageSendingSuccess();
+                    $success->setPhone($result->getPhone());
+                    $success->setMessageId($result->getMessageId());
+                    $success->setMessagesCount($result->getMessagesCount());
+                    $success->setCost($result->getCost());
+                    $success->setCurrency($result->getCurrency());
+
+                    $messages[] = $success;
+                }
+                else{
+                    $error = new MessageSendingError();
+                    $error->setPhone($result->getPhone());
+                    $error->setCode($result->getError());
+
+                    $messages[] = $error;
+                }
+            }
+
+            return $messages;
         }
-
-        return $messages;
+        catch(\Exception $e){
+            throw new MessageSendingResultException($e->getCode());
+        }
     }
 
     /**
      * Testing phone number for stop list
      *
      * @param string $phone phone number
+     *
+     * @throws StopListException
      * @return StopList
      */
     public function checkStopList($phone) {
-        $content = $this->getContent('find_on_stop', array('phone' => $phone));
+        try {
+            $content = $this->getContent('find_on_stop', array('phone' => $phone));
 
-        $stopList = new StopList($content);
+            $stopList = new StopList($content);
 
-        return $stopList;
+            return $stopList;
+        }
+        catch(\Exception $e){
+            throw new StopListException($e->getCode());
+        }
     }
 
     /**
      * Adding number to stop list
      *
      * @param string $phone phone number
+     *
+     * @throws AddToStopListException
      * @return mixed
      */
     public function addToStopList($phone) {
-        $content = $this->getContent('add2stop', array('phone' => $phone));
+        try {
+            $content = $this->getContent('add2stop', array('phone' => $phone));
 
-        return $content->id;
+            return $content->id;
+        }
+        catch(\Exception $e){
+            throw new AddToStopListException($e->getCode());
+        }
     }
 
     /**
      * Getting user templates
      *
+     * @throws TemplateException
      * @return array
      */
     public function getTemplates() {
-        $content = $this->getContent('template');
+        try {
+            $content = $this->getContent('template');
 
-        $templates = array();
-        foreach ($content as $title => $template) {
-            $templates[] = new Template($title, $template);
+            $templates = array();
+            foreach ($content as $title => $template) {
+                $templates[] = new Template($title, $template);
+            }
+
+            return $templates;
         }
-
-        return $templates;
+        catch(\Exception $e){
+            throw new TemplateException($e->getCode());
+        }
     }
 
     /**
@@ -194,12 +291,19 @@ class IntisClient extends AClient implements IClient {
      *
      * @param string $title template name
      * @param string $template text of template
+     *
+     * @throws AddTemplateException
      * @return mixed
      */
     public function addTemplate($title, $template) {
-        $content = $this->getContent('add_template', array('name' => $title, 'text' => $template));
+        try {
+            $content = $this->getContent('add_template', array('name' => $title, 'text' => $template));
 
-        return $content->id;
+            return $content->id;
+        }
+        catch(\Exception $e){
+            throw new AddTemplateException($e->getCode());
+        }
     }
 
     /**
@@ -207,44 +311,58 @@ class IntisClient extends AClient implements IClient {
      *
      * @param string $year year
      * @param string $month month
+     *
+     * @throws DailyStatsException
      * @return array
      */
     public function getDailyStatsByMonth($year, $month) {
-        $date = date("Y-m", mktime(0, 0, 0, $month, 1, $year));
+        try {
+            $date = date("Y-m", mktime(0, 0, 0, $month, 1, $year));
 
-        $content = $this->getContent('stat_by_month', array('month' => $date));
+            $content = $this->getContent('stat_by_month', array('month' => $date));
 
-        $dailyStats = array();
-        foreach ($content as $row1) {
-            $stats = array();
-            foreach ($row1->stats as $one) {
-                $stats[] = new Stats($one);
+            $dailyStats = array();
+            foreach ($content as $row1) {
+                $stats = array();
+                foreach ($row1->stats as $one) {
+                    $stats[] = new Stats($one);
+                }
+
+                $dailyStats[] = new DailyStats($row1->date, $stats);
             }
 
-            $dailyStats[] = new DailyStats($row1->date, $stats);
+            return $dailyStats;
         }
-
-        return $dailyStats;
+        catch(\Exception $e){
+            throw new DailyStatsException($e->getCode());
+        }
     }
 
     /**
      * Sending HLR request for number
      *
      * @param array|string $phone phone number
+     *
+     * @throws HLRResponseException
      * @return array
      */
-    public function makeHLRRequest($phone) {
-        if (!is_array($phone))
-            $phone = array($phone);
-        $str = implode(',', $phone);
+    public function makeHLRRequest($phone){
+        try {
+            if (!is_array($phone))
+                $phone = array($phone);
+            $str = implode(',', $phone);
 
-        $content = $this->getContent('hlr', array('phone' => $str));
+            $content = $this->getContent('hlr', array('phone' => $str));
 
-        $hlr = array();
-        foreach ($content as $one) {
-            $hlr[] = new HLRResponse($one);
+            $hlr = array();
+            foreach ($content as $one) {
+                $hlr[] = new HLRResponse($one);
+            }
+            return $hlr;
         }
-        return $hlr;
+        catch(\Exception $e){
+            throw new HLRResponseException($e->getCode());
+        }
     }
 
     /**
@@ -252,47 +370,67 @@ class IntisClient extends AClient implements IClient {
      *
      * @param string $from
      * @param string $to
+     *
+     * @throws HLRStatItemException
      * @return array
      */
     public function getHlrStats($from, $to) {
-        $content = $this->getContent('hlr_stat', array('from' => $from, 'to' => $to));
+        try {
+            $content = $this->getContent('hlr_stat', array('from' => $from, 'to' => $to));
+            $stats = array();
+            foreach ($content as $phone => $one) {
+                $stats[] = new HLRStatItem($phone, $one);
+            }
 
-        $stats = array();
-        foreach ($content as $phone => $one) {
-            $stats[] = new HLRStatItem($phone, $one);
+            return $stats;
         }
-
-        return $stats;
+        catch(\Exception $e){
+            throw new HLRStatItemException($e->getCode());
+        }
     }
 
     /**
      * Getting the operator of subscriber phone number
      *
      * @param string $phone phone number
+     *
+     * @throws NetworkException
      * @return Network
      */
     public function getNetworkByPhone($phone) {
-        $content = $this->getContent('operator', array('phone' => $phone));
+        try {
+            $content = $this->getContent('operator', array('phone' => $phone));
 
-        $network = new Network($content);
+            $network = new Network($content);
 
-        return $network;
+            return $network;
+        }
+        catch(\Exception $e){
+            throw new NetworkException($e->getCode());
+        }
     }
 
     /**
      * Getting incoming messages of certain date
      *
      * @param string $date date
+     *
+     * @throws IncomingMessageException
      * @return array
      */
     public function getIncomingMessages($date) {
-        $content = $this->getContent('incoming', array('date' => $date));
+        try {
+            $content = $this->getContent('incoming', array('date' => $date));
 
-        $messages = array();
-        foreach ($content as $key => $one) {
-            $messages[] = new IncomingMessage($key, $one);
+            $messages = array();
+            foreach ($content as $key => $one) {
+                $messages[] = new IncomingMessage($key, $one);
+            }
+
+            return $messages;
         }
-
-        return $messages;
+        catch(\Exception $e){
+            throw new IncomingMessageException($e->getCode());
+        }
     }
 }

@@ -15,13 +15,14 @@ use Intis\SDK\IntisClient;
 
 
 class BalanceTest extends \PHPUnit_Framework_TestCase {
-
-    private $login = 'rso';
-    private $apiKey = 'afa1748a75c0d796079d681e25d271a2c7916327';
-    private $apiHost = 'http://dev.sms16.ru/get/';
+    private $login = 'your api login';
+    private $apiKey = 'your api key here';
+    private $apiHost = 'http://api.host.com/get/';
 
     public function test_getBalance(){
-        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost);
+        $connector = new LocalApiConnector($this->getData());
+
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $balance = $client->getBalance();
 
         $amount = $balance->getAmount();
@@ -34,7 +35,19 @@ class BalanceTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Intis\SDK\Exception\BalanceException
      */
     public function test_getBalanceException(){
-        $client = new IntisClient($this->login . '__r', $this->apiKey, $this->apiHost);
+        $connector = new LocalApiConnector($this->getErrorData());
+
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $client->getBalance();
+    }
+
+    private function getData(){
+        $result = '{"money":4, "currency":"RUB"}';
+        return json_decode($result);
+    }
+
+    private function getErrorData(){
+        $result = '{"error":4}';
+        return json_decode($result);
     }
 }

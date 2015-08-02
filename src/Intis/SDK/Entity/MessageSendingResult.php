@@ -3,102 +3,45 @@ namespace Intis\SDK\Entity;
 
 /**
  * Class MessageSendingResult
- *
  * Class of getting response to SMS sending
  *
  * @package Intis\SDK\Entity
  */
-class MessageSendingResult{
-    /**
-     * @var int|string Phone number
-     */
+class MessageSendingResult
+{
     private $phone;
-    /**
-     * @var integer Message ID
-     */
-    private $messageId;
-    /**
-     * @var float Price of message
-     */
-    private $cost;
-    /**
-     * @var string Name of currency
-     */
-    private $currency;
-    /**
-     * @var integer Number of message parts
-     */
-    private $messagesCount;
-    /**
-     * @var string Text of the error while SMS sending
-     */
-    private $error;
-    
-    public function __construct($obj) {
-        foreach($obj as $phone => $params){
-            $this->phone = $phone;
-            if(isset($params->id_sms))
-                $this->messageId = $params->id_sms;
-            if(isset($params->cost))
-                $this->cost = $params->cost;
-            if(isset($params->count_sms))
-                $this->messagesCount = $params->count_sms;
-            if(isset($params->error))
-                $this->error = $params->error;
-        }
-    }
+
+    private $isOk;
 
     /**
-     * Getting phone number
-     *
-     * @return int|string
+     * @return Phone number
      */
-    public function getPhone() {
+    public function getPhone()
+    {
         return $this->phone;
     }
 
     /**
-     * Getting message ID
-     *
-     * @return integer
+     * @return Success result
      */
-    public function getMessageId() {
-        return $this->messageId;
+    public function isOk()
+    {
+        return $this->isOk;
     }
 
     /**
-     * Getting price of the message
-     *
-     * @return float
+     * @param mPhone - Phone number
      */
-    public function getCost() {
-        return $this->cost;
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
     }
 
     /**
-     * Getting name of currency
-     *
-     * @return string
+     * @param mIsOk - Success result
      */
-    public function getCurrency() {
-        return $this->currency;
-    }
-
-    /**
-     * Getting number of message parts
-     *
-     * @return integer
-     */
-    public function getMessagesCount() {
-        return $this->messagesCount;
-    }
-    
-    /**
-     * Getting error of SMS sending
-     *
-     * @return string
-     */
-    public function getError(){
-        return $this->error;
+    public function setIsOk($isOk)
+    {
+        $this->isOk = $isOk;
     }
 }
