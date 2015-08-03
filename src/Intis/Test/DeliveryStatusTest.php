@@ -23,7 +23,7 @@ class DeliveryStatusTest extends \PHPUnit_Framework_TestCase {
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
 
-        $messageId = array('4334273170107609330007');
+        $messageId = array('4385937961543210880001', '4385937961543210880002');
 
         $deliveryStatus = $client->getDeliveryStatus($messageId);
 
@@ -44,13 +44,13 @@ class DeliveryStatusTest extends \PHPUnit_Framework_TestCase {
     public function test_getDeliveryStatusException(){
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $messageId = array('4381960011347047370003');
+        $messageId = array('4385937961543210880001', '4385937961543210880002');
 
         $client->getDeliveryStatus($messageId);
     }
 
     private function getData(){
-        $result = '[{"messageId":1, "status":"deliver", "time":"2014-10-05"},{"messageId":2, "status":"not_deliver", "time":"2014-10-01"}]';
+        $result = '{"4385937961543210880001":{"status":"deliver", "time":"2014-10-05"},"4385937961543210880002":{"status":"not_deliver", "time":"2014-10-01"}}';
         return json_decode($result);
     }
 

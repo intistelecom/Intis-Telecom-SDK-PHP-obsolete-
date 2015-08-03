@@ -65,7 +65,7 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
     }
 
     private function getData(){
-        $result = '{"79802503672":{"error":"0","id_sms":"4384607771347164730001","cost":1,"count_sms":1,"sender":"smstest","network":" Russia MTC","ported":0},"79009009091":{"error":31}}';
+        $result = '{"79009009090":{"error":"0","id_sms":"4384607771347164730001","cost":1,"count_sms":1,"sender":"smstest","network":" Russia MTC","ported":0},"79009009091":{"error":31}}';
         return json_decode($result);
     }
 

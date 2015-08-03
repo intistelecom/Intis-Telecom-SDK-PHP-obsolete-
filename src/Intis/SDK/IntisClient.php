@@ -166,8 +166,8 @@ class IntisClient extends AClient implements IClient {
             $content = $this->getContent('status', array('state' => $str));
 
             $deliveryStatus = array();
-            foreach ($content as $messageStatus) {
-                $deliveryStatus[] = new DeliveryStatus($messageStatus);
+            foreach ($content as $id => $messageStatus) {
+                $deliveryStatus[] = new DeliveryStatus($id, $messageStatus);
             }
 
             return $deliveryStatus;
