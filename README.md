@@ -1,5 +1,15 @@
-Intis-Telecom-SDK-PHP
+﻿Intis-Telecom-SDK-PHP
 =====================
+For more than ten years, mobile messaging services have been actively used by thousands of different companies all over the globe.
+A wide audience coverage and impressive delivery speed - these both are the main advantages of SMS as a communication channel for your business.
+
+Have a look at Intis Telecom SMS solutions which can be applied in any business fields, no matter what position you have in your company.
+
+Для более тесной интеграции PHP приложения c API интерфейсом Intis SMS,
+предусмотрена возможность использования PHP SDK, который позволяет отправлять смс сообщения на любые мобильные России,
+доступна поддержка шаблонов смс, хранение истории и ряд других полезных функций.
+
+Для начала работы с сервисом, Вам необходимо зарегестрироваться на сайте https://new.sms16.ru/register/. Получить login и API ключ
 
 Installation using Composer
 ---------------------------
@@ -11,7 +21,7 @@ Usage
 
 class IntisClient - The main class for SMS sending and getting API information
 
-��� ������������� ���������� �������� � ����������� ��� ������������ ���������
+Для инициализации необходимо передать в конструктор три обязательных параметра
 $login - user login
 $apiKey - user API key
 $apiHost - API address
@@ -26,10 +36,10 @@ use Intis\SDK\IntisClient;
 $client = new IntisClient($login, $apiKey, $apiHost);
 ```
 
-����� �������� ��������� ������:
+Класс содержит следующие методы:
 --------------------------------
 
-Getting user balance `$client->getBalance()`
+Для запроса баланса Вашего лицевого счета в сервисе используется метод `getBalance()`
 ```php
 $balance = $client->getBalance();
 
@@ -37,7 +47,7 @@ $amount = $balance->getAmount(); // Getting amount of money
 $currency = $balance->getCurrency(); // Getting name of currency
 ```
 
-Getting all user lists `getPhoneBases()`
+Запросить список всех имеющихся в Вашей системе телефонных баз `getPhoneBases()`
 ```php
 $phoneBases = $client->getPhoneBases();
 
@@ -57,7 +67,8 @@ foreach($phoneBases as $oneBase){
 }
 ```
 
-Getting all user sender names `$client->getOriginators()`
+В системе предусмотрена возможность создать неограниченное количество имен отправителей СМС.
+Для получения списка отправителей используется метод `getOriginators()`
 ```php
 $originators = $client->getOriginators();
 
@@ -67,7 +78,8 @@ foreach($originators as $originator){
 }
 ```
 
-Getting subscribers of list `$client->getPhoneBaseItems($baseId, $page)` $baseId - List ID (������������ ��������), $page - Page of list (�������������� ��������)
+Для получения списка номеров телефонов из конкретной базы используйте метод `getPhoneBaseItems($baseId, $page)`. Для удобства весь список разбит на страницы.
+Параметры: $baseId - ID телефонной базы в системе (обязательный параметр), $page - Номер страницы в базе (необязательный параметр)
 ```php
 $items = $client->getPhoneBaseItems($baseId, $page);
 
@@ -85,7 +97,8 @@ foreach($items as $item){
 }
 ```
 
-Getting message status `$client->getDeliveryStatus($messageId)` $messageId - Message ID
+Для получения информации по статусам отправленных смс вы можете использовать функцию `getDeliveryStatus($messageId)` $messageId - ID отправленного сообщения.
+(Вы можете передать в качестве параметра ID одного или нескольких статусов массивом или строкой через запятую).
 ```php
 $deliveryStatus = $client->getDeliveryStatus($messageId);
 
@@ -96,13 +109,15 @@ foreach($deliveryStatus as $message){
 }
 ```
 
-SMS sending `$client->sendMessage($phone, $originator, $text)`  $phone - phone number(s) (array|string), $originator - sender name, $text sms text.
-������ �������� `MessageSendingSuccess` ���� ��������� ������� ���������� ��� `MessageSendingError` ���� �������� ������
+Для отправки смс, как одному пользователю так и нескольким, воспользуйтесь функцией `sendMessage($phone, $originator, $text)`
+$phone - номер телефона на который необходимо отправить сообщение (Вы можете передать в качестве параметра $phone один или несколько телефонов массивом или строкой через запятую),
+$originator - имя отправителя от имени которого идет рассылка, $text - текст смс.
+Массив содержит `MessageSendingSuccess` если сообщение успешно отправлено или `MessageSendingError` если возникла ошибка
 ```php
 $messages = $client->sendMessage($phone, $originator, $text);
 
 foreach($messages as $one){
-    if($one->isOk()) { // ���� �������� �������� ���������
+    if($one->isOk()) { // флаг успешной отправки сообщения
         $one->getPhone(); // Getting phone number
         $one->getMessageId(); // Getting message ID
         $one->getCost(); // Getting price for message
@@ -118,7 +133,12 @@ foreach($messages as $one){
 }
 ```
 
-Testing phone number for stop list `$client->checkStopList($phone)` $phone - phone number
+Добавить номер в СТОП-лист `addToStopList($phone)` $phone - phone number
+```php
+$id = $client->addToStopList($phone); // return ID in stop list
+```
+
+Для проверки нахождения телефонного номера в СТОП-листе необходимо воспользоваться функцией `checkStopList($phone)`. Где $phone - phone number
 ```php
 $stopList = $client->checkStopList($phone);
 
@@ -127,12 +147,8 @@ $stopList->getDescription(); // Getting reason of adding to stop list
 $stopList->getTimeAddedAt(); // Getting time of adding to stop list
 ```
 
-Adding number to stop list `$client->addToStopList($phone)` $phone - phone number
-```php
-$id = $client->addToStopList($phone); // return ID in stop list
-```
-
-Getting user templates `$client->getTemplates()`
+В системе предусмотрена возможность создания множества шаблонов смс сообщений. Для получения списка таких шблонов используется функция `getTemplates()`.
+В ответ вы получите список всех имеющихся у Вас шаблонов.
 ```php
 $templates = $client->getTemplates();
 
@@ -140,16 +156,17 @@ foreach ($templates as $template) {
     $template->getId(); // Getting template ID
     $template->getTitle(); // Getting template name
     $template->getTemplate(); // Getting text of template
-    $template->getCreatedAt(); // ��������� ������� �������� �������
+    $template->getCreatedAt(); // Получение времени создания шаблона
 }
 ```
 
-Adding user template `$client->addTemplate($title, $template)` $title - template name, $template - text of template
+Для добавления нового шаблона в систему используется функция `addTemplate($title, $template)`. Где $title - template name, $template - text of template
 ```php
 $templteId = $client->addTemplate($title, $text); // return ID user template
 ```
 
-Getting statistics for the certain month `$client->getDailyStatsByMonth($year, $month)` $year - year, $month - month (format date YYYY-mm-dd)
+Получить статистику отправки сообщения за определенный месяц вы можете с помощью функции `getDailyStatsByMonth($year, $month)`.
+Где $year - год и $month - месяц за который вы хотите получить статистику.
 ```php
 $result = $client->getDailyStatsByMonth($year, $month);
 
@@ -166,7 +183,11 @@ foreach($result as $one){
 }
 ```
 
-Sending HLR request for number `$client->makeHLRRequest($phone)` $phone - phone number
+HLR (Home Location Register) — это централизованная база данных, которая содержит подробную информацию о каждом абоненте мобильных сетей GSM-операторов.
+Данные услуги позволяют выполнять проверку списков с номерами телефонов или одиночные номера,
+определяя доступных и недоступных абонентов и позволяя осуществлять последующую чистку баз данных от неактуальных номеров.
+Для осуществления такого запроса в системе предусмотрена функция `makeHLRRequest($phone)`.
+(Вы можете передать в качестве параметра $phone один или несколько телефонов массивом или строкой через запятую)
 ```php
 $result = $client->makeHLRRequest($phone);
 
@@ -195,7 +216,8 @@ foreach ($result as $hlr) {
 }
 ```
 
-Getting statuses of HLR request `$client->getHlrStats($from, $to)` $from - ���� ������ �������, $to - ���� ����� �������
+Так же Вы можете получить статистику HLR запросов за определенный период времени `getHlrStats($from, $to)`.
+Где $from - дата начала периода, $to - дата конца периода
 ```php
 $result = $client->getHlrStats($from, $to);
 
@@ -229,14 +251,14 @@ foreach($result as $hlr){
     }
 ```
 
-Getting the operator of subscriber phone number `$client->getNetworkByPhone($phone)` $phone - phone number
+Иногда бывает необходимо узнать к какому оператору принадлежит номер телефона. Вы можете легко это сделать выполнив функцию `getNetworkByPhone($phone)`. Где $phone - номер телефона
 ```php
 $network = $client->getNetworkByPhone($phone);
 
 $network->getTitle(); // Getting operator of subscriber
 ```
 
-Getting incoming messages of certain date `$client->getIncomingMessages($date)` $date - date (format date YYYY-mm-dd)
+Для получения списка входящих сообщения необходимо воспользоваться функцией `getIncomingMessages($date)`. Где $date - интересующая Вас дата (format date YYYY-mm-dd)
 ```php
 $result = $client->getIncomingMessages($date);
 
