@@ -1,40 +1,35 @@
 ﻿Intis-Telecom-SDK-PHP
 =====================
 
-Компания Интис Телеком позволяет отправлять СМС по всему миру, используя API. Он основан на отправке HTTP(s) запросов и получения ответной информации в JSON или XML. Основной функционал, поддерживаемый API:
+The Intis telecom gateway lets you send SMS messages worldwide via its API. This program sends HTTP(s) requests and receives information as a response in JSON and/or XML. The main functions of our API include:
 
-* отправка СМС, в том числе, в назначенное время
-* получение отчета о доставке ранее отправленной СМС
-* запрос списка разрешенных отправителей
-* запрос списка входящих СМС
-* запрос баланса
-* запрос списка баз
-* запрос номеров из базы
-* поиск номера в стоп-листе
-* добавление номера в стоп-лист
-* запрос списка шаблонов
-* добавление шаблона
-* общая статистика за месяц
+* sending SMS messages (including scheduling options);
+* receiving status reports about messages that have been sent previously;
+* requesting lists of authorised sender names;
+* requesting lists of incoming SMS messages;
+* requesting current balance status;
+* requesting lists of databases;
+* requesting lists of numbers within particular contact list;
+* searching for a particular number in a stop list;
+* requesting lists of templates;
+* adding new templates;
+* requesting monthly statistics;
+* making HLR request;
 * HLR запрос
-* статистика HLR запросов
-* запрос оператора по номеру телефона
+* receiving HLR request statistics;
+* requesting an operator’s name by phone number;
 
-Для начала работы с сервисом, Вам необходимо зарегестрироваться на сайте https://go.intistele.com/external/client/register/. Получить login и API ключ
-
-Installation using Composer
----------------------------
-
-$ composer require intis/sdk
+To begin using our API please [apply](https://go.intistele.com/external/client/register/) for your account at our website where you can get your login and API key.
 
 Usage
 ---------------------------
 
 class IntisClient - The main class for SMS sending and getting API information
 
-Для инициализации необходимо передать в конструктор три обязательных параметра
-$login - user login
-$apiKey - user API key
-$apiHost - API address
+There are three mandatory parameters that you have to provide the constructor in order to initialize. They are:
+* $login - user login
+* $apiKey - user API key
+* $apiHost - API address
 
 ```php
 <?php
@@ -46,237 +41,231 @@ use Intis\SDK\IntisClient;
 $client = new IntisClient($login, $apiKey, $apiHost);
 ```
 
-Класс содержит следующие методы:
+This class includes the following methods:
 --------------------------------
 
-Для запроса баланса Вашего лицевого счета в сервисе используется метод `getBalance()`
+Use the `getBalance()` method to request your balance status
 ```php
 $balance = $client->getBalance();
 
-$amount = $balance->getAmount(); // Getting amount of money
+$amount = $balance->getAmount();     // Getting amount of money
 $currency = $balance->getCurrency(); // Getting name of currency
 ```
 
-Запросить список всех имеющихся в Вашей системе телефонных баз `getPhoneBases()`
+To get a list of all the contact databases you have use the function `getPhoneBases()`
 ```php
 $phoneBases = $client->getPhoneBases();
 
 foreach($phoneBases as $oneBase){
-    $oneBase->getBaseId(); // Getting list ID
-    $oneBase->getTitle(); // Getting list name
-    $oneBase->getCount(); // Getting number of contacts in list
-    $oneBase->getPages(); // Getting number of pages in list
+    $oneBase->getBaseId();                               // Getting list ID
+    $oneBase->getTitle();                                // Getting list name
+    $oneBase->getCount();                                // Getting number of contacts in list
+    $oneBase->getPages();                                // Getting number of pages in list
 
     $birthday = $oneBase->getBirthdayGreetingSettings(); // Getting settings of birthday greetings
-    $birthday->getEnabled(); // Getting key that is responsible for sending greetings, 0 - do not send, 1 - send
-    $birthday->getDaysBefore(); // Getting the number of days to send greetings before
-    $birthday->getOriginator(); // Getting name of sender for greeting SMS
-    $birthday->getTimeToSend(); // Getting time for sending greetings. All SMS will be sent at this time.
-    $birthday->getUseLocalTime(); // Getting variable that indicates using of local time while SMS sending.
-    $birthday->getTemplate(); // Getting text template that will be used in the messages.
+    $birthday->getEnabled();                             // Getting key that is responsible for sending greetings, 0 - do not send, 1 - send
+    $birthday->getDaysBefore();                          // Getting the number of days to send greetings before
+    $birthday->getOriginator();                          // Getting name of sender for greeting SMS
+    $birthday->getTimeToSend();                          // Getting time for sending greetings. All SMS will be sent at this time.
+    $birthday->getUseLocalTime();                        // Getting variable that indicates using of local time while SMS sending.
+    $birthday->getTemplate();                            // Getting text template that will be used in the messages
 }
 ```
 
-В системе предусмотрена возможность создать неограниченное количество имен отправителей СМС.
-Для получения списка отправителей используется метод `getOriginators()`
+Our gateway supports the option of having unlimited sender’s names. To see a list of all senders’ names use the method `getOriginators()`
 ```php
 $originators = $client->getOriginators();
 
 foreach($originators as $originator){
     $originator->getOriginator(); // Getting sender name
-    $originator->getState(); // Getting sender status
+    $originator->getState();      // Getting sender status
 }
 ```
 
-Для получения списка номеров телефонов из определенной базы абонентов в личном кабинете используется метод `getPhoneBaseItems($baseId, $page)`. Для удобства весь список разбит на страницы.
-Параметры: $baseId - ID телефонной базы в системе (обязательный параметр), $page - Номер страницы в базе (необязательный параметр)
+To get a list of phone numbers from a certain contact list you need the `getPhoneBaseItems($baseId, $page)` method. For your convenience, the entire list is split into separate pages.
+The parameters are: $baseId - the ID of a particular database (mandator), and $page - a page number in a particular database (optional).
 ```php
 $items = $client->getPhoneBaseItems($baseId, $page);
 
 foreach($items as $item){
-    $item->getPhone(); // Getting subscriber number
-    $item->getFirstName(); // Getting subscriber first name
+    $item->getPhone();      // Getting subscriber number
+    $item->getFirstName();  // Getting subscriber first name
     $item->getMiddleName(); // Getting subscriber middle name
-    $item->getLastName(); // Getting subscriber last name
-    $item->getBirthDay(); // Getting subscriber birthday
-    $item->getGender(); // Getting gender of subscriber
-    $item->getNetwork(); // Getting operator of subscriber
-    $item->getArea(); // Getting region of subscriber
-    $item->getNote1(); // Getting subscriber note 1
-    $item->getNote2(); // Getting subscriber note 2
+    $item->getLastName();   // Getting subscriber last name
+    $item->getBirthDay();   // Getting subscriber birthday
+    $item->getGender();     // Getting gender of subscriber
+    $item->getNetwork();    // Getting operator of subscriber
+    $item->getArea();       // Getting region of subscriber
+    $item->getNote1();      // Getting subscriber note 1
+    $item->getNote2();      // Getting subscriber note 2
 }
 ```
 
-Для получения информации по статусам отправленных СМС используется функция `getDeliveryStatus($messageId)` $messageId - ID отправленного сообщения.
-(Возможна передача в качестве параметра ID одного или нескольких статусов массивом или строкой через запятую).
+To receive status info for an SMS you have already sent, use the function `getDeliveryStatus($messageId)` where $messageId - is an array of sent message IDs.
 ```php
 $deliveryStatus = $client->getDeliveryStatus($messageId);
 
 foreach($deliveryStatus as $message){
-    $message->getMessageId(); // Getting message ID
+    $message->getMessageId();     // Getting message ID
     $message->getMessageStatus(); // Getting a message status
-    $message->getCreatedAt(); // Getting a time of message
+    $message->getCreatedAt();     // Getting a time of message
 }
 ```
 
-Для отправки СМС (в том числе и нескольким абонентам) используется функция `sendMessage($phone, $originator, $text)`
-$phone - номер телефона на который необходимо отправить сообщение (Допускается передача в качестве параметра $phone одного или несколько номеров телефонов массивом или строкой через запятую),
-$originator - имя отправителя от имени которого идет рассылка, $text - текст смс.
-Массив содержит `MessageSendingSuccess` если сообщение успешно отправлено или `MessageSendingError` если возникла ошибка
+To send a message (to one or several recipients), use the function `sendMessage($phone, $originator, $text)`,
+where ‘$phone’ - is a set of numbers you send your messages to,
+‘$originator’ is a sender’s name and ‘$text’ stands for the content of the message.
+An array includes `MessageSendingSuccess` if the message was successfully sent or `MessageSendingError` in case of failure.
 ```php
 $messages = $client->sendMessage($phone, $originator, $text);
 
 foreach($messages as $one){
-    if($one->isOk()) { // флаг успешной отправки сообщения
-        $one->getPhone(); // Getting phone number
-        $one->getMessageId(); // Getting message ID
-        $one->getCost(); // Getting price for message
-        $one->getCurrency(); // Getting name of currency
+    if($one->isOk()) {            // A flag of successful dispatch of a message
+        $one->getPhone();         // Getting phone number
+        $one->getMessageId();     // Getting message ID
+        $one->getCost();          // Getting price for message
+        $one->getCurrency();      // Getting name of currency
         $one->getMessagesCount(); // Getting number of message parts
     }
     else{
-        $one->getPhone(); // Getting phone number
-        $one->getMessage(); // Getting error message
-        $one->getCode(); // Getting code error in SMS sending
+        $one->getPhone();         // Getting phone number
+        $one->getMessage();       // Getting error message
+        $one->getCode();          // Getting code error in SMS sending
     }
 
 }
 ```
 
-Добавить номер в СТОП-лист `addToStopList($phone)` $phone - phone number
+To add a number to a stoplist run `addToStopList($phone)` where ‘$ phone’ is an individual phone number
 ```php
 $id = $client->addToStopList($phone); // return ID in stop list
 ```
 
-Для проверки наличия телефонного номера в СТОП-листе необходимо воспользоваться функцией `checkStopList($phone)`. Где $phone - phone number
+To check if a particular phone number is listed within a stop list use the function `checkStopList($phone)`, where ‘$phone’ is an individual phone number.
 ```php
 $stopList = $client->checkStopList($phone);
 
-$stopList->getId(); // Getting ID in stop list
+$stopList->getId();          // Getting ID in stop list
 $stopList->getDescription(); // Getting reason of adding to stop list
 $stopList->getTimeAddedAt(); // Getting time of adding to stop list
 ```
 
-В системе предусмотрена возможность создания множества шаблонов СМС сообщений. Для получения списка таких шаблонов используется функция `getTemplates()`.
-В ответ возвращается список всех имеющихся в данной учетной записи шаблонов.
+Our gateway supports the option of creating multiple templates of SMS messages. To get a list of templates use the function `getTemplates()`.
+As a response you will get a list of all the messages that a certain login has set up.
 ```php
 $templates = $client->getTemplates();
 
 foreach ($templates as $template) {
-    $template->getId(); // Getting template ID
-    $template->getTitle(); // Getting template name
-    $template->getTemplate(); // Getting text of template
-    $template->getCreatedAt(); // Получение времени создания шаблона
+    $template->getId();        // Getting template ID
+    $template->getTitle();     // Getting template name
+    $template->getTemplate();  // Getting text of template
+    $template->getCreatedAt(); // Getting the date and time when a particular template was created
 }
 ```
-
-Для добавления нового шаблона в систему используется функция `addTemplate($title, $template)`. Где $title - template name, $template - text of template
+To add a new template to a system run the function `addTemplate($title, $template)` where $‘title’ is a name of a template, and ‘$template’ is the text content of a template
 ```php
 $templteId = $client->addTemplate($title, $text); // return ID user template
 ```
 
-Для получения статистики отправки сообщения за определенный месяц используется функция `getDailyStatsByMonth($year, $month)`.
-Где $year - год и $month - месяц за который необходимо получить статистику.
+To get stats about messages you have sent during a particular month use the function `getDailyStatsByMonth($year, $month)` where ‘$year’ and $‘month’ - are the particular date you need statistics for.
 ```php
 $result = $client->getDailyStatsByMonth($year, $month);
 
 foreach($result as $one){
-    $one->getDay(); // Getting day of month
+    $one->getDay();            // Getting day of month
 
     $stats = $one->getStats(); // Getting daily statistics
     foreach($stats as $i){
-        $i->getState(); // Getting status of message
-        $i->getCost(); // Getting prices of message
-        $i->getCurrency(); // Getting name of currency
-        $i->getCount(); // Getting number of message parts
+        $i->getState();        // Getting status of message
+        $i->getCost();         // Getting prices of message
+        $i->getCurrency();     // Getting name of currency
+        $i->getCount();        // Getting number of message parts
     }
 }
 ```
 
-HLR (Home Location Register) — это централизованная база данных, которая содержит подробную информацию о каждом абоненте мобильных сетей GSM-операторов.
-HLR запрос позволяет выполнить проверку телефонных номеров (в том числе и списком), определяя доступность абонентов для дальнейшей очистки базы данных от неактуальных номеров.
-Для осуществления HLR запроса в системе предусмотрена функция `makeHLRRequest($phone)`.
-(Допускается передавать в качестве параметра $phone один или несколько телефонов массивом или строкой через запятую)
+HLR (Home Location Register) - is the centralised databas that provides detailed information regarding the GSM mobile network of every mobile user.
+HLR requests let you check the availability of a single phone number or a list of numbers for further clean up of unavailable numbers from a contact list.
+To perform an HLR request, our system supports the function `makeHLRRequest($phone)` where ‘$phone’ is the array of phone numbers.
 ```php
 $result = $client->makeHLRRequest($phone);
 
 foreach ($result as $hlr) {
-    $hlr->getId(); // Getting ID
-    $hlr->getDestination(); // Getting recipient
-    $hlr->getIMSI(); // Getting IMSI
-    $hlr->getMCC(); // Getting MCC of subscriber
-    $hlr->getMNC(); // Getting MNC of subscriber
-    $hlr->getOriginalCountryName(); // Getting the original name of the subscriber's country
-    $hlr->getOriginalCountryCode(); // Getting the original code of the subscriber's country
-    $hlr->getOriginalNetworkName(); // Getting the original name of the subscriber's operator
+    $hlr->getId();                    // Getting ID
+    $hlr->getDestination();           // Getting recipient
+    $hlr->getIMSI();                  // Getting IMSI
+    $hlr->getMCC();                   // Getting MCC of subscriber
+    $hlr->getMNC();                   // Getting MNC of subscriber
+    $hlr->getOriginalCountryName();   // Getting the original name of the subscriber's country
+    $hlr->getOriginalCountryCode();   // Getting the original code of the subscriber's country
+    $hlr->getOriginalNetworkName();   // Getting the original name of the subscriber's operator
     $hlr->getOriginalNetworkPrefix(); // Getting the original prefix of the subscriber's operator
-    $hlr->getPortedCountryName(); // Getting name of country if subscriber's phone number is ported
-    $hlr->getPortedCountryPrefix(); // Getting prefix of country if subscriber's phone number is ported
-    $hlr->getPortedNetworkName(); // Getting name of operator if subscriber's phone number is ported
-    $hlr->getPortedNetworkPrefix(); // Getting prefix of operator if subscriber's phone number is ported
-    $hlr->getRoamingCountryName(); // Getting name of country if the subscriber is in roaming
-    $hlr->getRoamingCountryPrefix(); // Getting prefix of country if the subscriber is in roaming
-    $hlr->getRoamingNetworkName(); // Getting name of operator if the subscriber is in roaming
-    $hlr->getRoamingNetworkPrefix(); // Getting prefix of operator if the subscriber is in roaming
-    $hlr->getStatus(); // Getting status of subscriber
-    $hlr->getPricePerMessage(); // Getting price for message
-    $hlr->isInRoaming(); // Determining if the subscriber is in roaming
-    $hlr->isPorted(); // Identification of ported number
+    $hlr->getPortedCountryName();     // Getting name of country if subscriber's phone number is ported
+    $hlr->getPortedCountryPrefix();   // Getting prefix of country if subscriber's phone number is ported
+    $hlr->getPortedNetworkName();     // Getting name of operator if subscriber's phone number is ported
+    $hlr->getPortedNetworkPrefix();   // Getting prefix of operator if subscriber's phone number is ported
+    $hlr->getRoamingCountryName();    // Getting name of country if the subscriber is in roaming
+    $hlr->getRoamingCountryPrefix();  // Getting prefix of country if the subscriber is in roaming
+    $hlr->getRoamingNetworkName();    // Getting name of operator if the subscriber is in roaming
+    $hlr->getRoamingNetworkPrefix();  // Getting prefix of operator if the subscriber is in roaming
+    $hlr->getStatus();                // Getting status of subscriber
+    $hlr->getPricePerMessage();       // Getting price for message
+    $hlr->isInRoaming();              // Determining if the subscriber is in roaming
+    $hlr->isPorted();                 // Identification of ported number
 }
 ```
-
-Кроме того, возможно получить статистику HLR запросов за определенный период времени `getHlrStats($from, $to)`.
-Где $from - дата начала периода, $to - дата конца периода
+Besides, you can can get HLR requests statistics regarding a certain time range. To do that,  use the function `getHlrStats($from, $to)` where ‘$from’ and ‘$to’ are the beginning and end of a time period.
 ```php
 $result = $client->getHlrStats($from, $to);
 
 foreach($result as $hlr){
-        $hlr->getId(); // Getting ID
-        $hlr->getPhone(); // Getting phone number
-        $hlr->getMessageId(); // Getting message ID
-        $hlr->getTotalPrice(); // Getting final price of request
-        $hlr->getDestination(); // Getting recipient
-        $hlr->getIMSI(); // Getting IMSI
-        $hlr->getMCC(); // Getting MCC of subscriber
-        $hlr->getMNC(); // Getting MNC of subscriber
-        $hlr->getOriginalCountryName(); // Getting the original name of the subscriber's country
-        $hlr->getOriginalCountryCode(); // Getting the original code of the subscriber's country
-        $hlr->getOriginalNetworkName(); // Getting the original name of the subscriber's operator
+        $hlr->getId();                    // Getting ID
+        $hlr->getPhone();                 // Getting phone number
+        $hlr->getMessageId();             // Getting message ID
+        $hlr->getTotalPrice();            // Getting final price of request
+        $hlr->getDestination();           // Getting recipient
+        $hlr->getIMSI();                  // Getting IMSI
+        $hlr->getMCC();                   // Getting MCC of subscriber
+        $hlr->getMNC();                   // Getting MNC of subscriber
+        $hlr->getOriginalCountryName();   // Getting the original name of the subscriber's country
+        $hlr->getOriginalCountryCode();   // Getting the original code of the subscriber's country
+        $hlr->getOriginalNetworkName();   // Getting the original name of the subscriber's operator
         $hlr->getOriginalNetworkPrefix(); // Getting the original prefix of the subscriber's operator
-        $hlr->getPortedCountryName(); // Getting name of country if subscriber's phone number is ported
-        $hlr->getPortedCountryPrefix(); // Getting prefix of country if subscriber's phone number is ported
-        $hlr->getPortedNetworkName(); // Getting name of operator if subscriber's phone number is ported
-        $hlr->getPortedNetworkPrefix(); // Getting prefix of operator if subscriber's phone number is ported
-        $hlr->getRoamingCountryName(); // Getting name of country if the subscriber is in roaming
-        $hlr->getRoamingCountryPrefix(); // Getting prefix of country if the subscriber is in roaming
-        $hlr->getRoamingNetworkName(); // Getting name of operator if the subscriber is in roaming
-        $hlr->getRoamingNetworkPrefix(); // Getting prefix of operator if the subscriber is in roaming
-        $hlr->getStatus(); // Getting status of subscriber
-        $hlr->getPricePerMessage(); // Getting price for message
-        $hlr->isInRoaming(); // Determining if the subscriber is in roaming
-        $hlr->isPorted(); // Identification of ported number
-        $hlr->getRequestId(); // Getting request ID
-        $hlr->getRequestTime(); // Getting time of request
+        $hlr->getPortedCountryName();     // Getting name of country if subscriber's phone number is ported
+        $hlr->getPortedCountryPrefix();   // Getting prefix of country if subscriber's phone number is ported
+        $hlr->getPortedNetworkName();     // Getting name of operator if subscriber's phone number is ported
+        $hlr->getPortedNetworkPrefix();   // Getting prefix of operator if subscriber's phone number is ported
+        $hlr->getRoamingCountryName();    // Getting name of country if the subscriber is in roaming
+        $hlr->getRoamingCountryPrefix();  // Getting prefix of country if the subscriber is in roaming
+        $hlr->getRoamingNetworkName();    // Getting name of operator if the subscriber is in roaming
+        $hlr->getRoamingNetworkPrefix();  // Getting prefix of operator if the subscriber is in roaming
+        $hlr->getStatus();                // Getting status of subscriber
+        $hlr->getPricePerMessage();       // Getting price for message
+        $hlr->isInRoaming();              // Determining if the subscriber is in roaming
+        $hlr->isPorted();                 // Identification of ported number
+        $hlr->getRequestId();             // Getting request ID
+        $hlr->getRequestTime();           // Getting time of request
     }
 ```
 
-Для получения информации о пренадлежности определенного номера какому-либо оператору используется функция `getNetworkByPhone($phone)`. Где $phone - номер телефона
+To get information regarding which mobile network a certain phone number belongs to, use the function `getNetworkByPhone($phone)`, where ‘$phone’ is a phone number.
 ```php
 $network = $client->getNetworkByPhone($phone);
 
 $network->getTitle(); // Getting operator of subscriber
 ```
-Следует отметить, что данный метод является менее точным, чем HLR запрос, т.к. использует внутреннюю базу данных компании Интис Телеком о пренадлежности абонентов определенному оператору.
 
-Для получения списка входящих сообщений необходимо воспользоваться функцией `getIncomingMessages($date)`. Где $date - интересующая Вас дата (format date YYYY-mm-dd)
+Please bear in mind that this method has less accuracy than HLR requests as it uses our internal database to check which mobile operator a phone numbers belongs to.
+
+To get a list of incoming messages please use the function `getIncomingMessages($date)`, where ‘$date’ stands for a particular day in YYYY-mm-dd format.
 ```php
 $result = $client->getIncomingMessages($date);
 
 foreach($result as $one){
-    $one->getMessageId(); // Getting message ID
+    $one->getMessageId();  // Getting message ID
     $one->getOriginator(); // Getting sender name of the incoming message
-    $one->getPrefix(); // Getting prefix of the incoming message
+    $one->getPrefix();     // Getting prefix of the incoming message
     $one->getReceivedAt(); // Getting date of the incoming message
-    $one->getText(); // Getting text of the incoming message
+    $one->getText();       // Getting text of the incoming message
 }
 ```

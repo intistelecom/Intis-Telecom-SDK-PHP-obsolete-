@@ -37,10 +37,8 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
     public function test_sendMessage(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = array('79802503672','79009009091');
-        /*
-         * || $phone = '79009009090,79009009091,79009009092'
-         */
+        $phone = array('442073238000','442073238001');
+
         $originator = "smstest";
         $text = "test message";
         $messages = $client->sendMessage($phone, $originator, $text);
@@ -70,17 +68,15 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
     public function test_sendMessageException(){
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = array('79009009090','79009009091');
-        /*
-         * || $phone = '79009009090,79009009091,79009009092'
-         */
+        $phone = array('442073238000','442073238001');
+
         $originator = 'test';
         $text = 'test message';
         $client->sendMessage($phone, $originator, $text);
     }
 
     private function getData(){
-        $result = '{"79009009090":{"error":"0","id_sms":"4384607771347164730001","cost":1,"count_sms":1,"sender":"smstest","network":" Russia MTC","ported":0},"79009009091":{"error":31}}';
+        $result = '{"442073238000":{"error":"0","id_sms":"4384607771347164730001","cost":1,"count_sms":1,"sender":"smstest","network":"United Kingdom","ported":0},"442073238001":{"error":31}}';
         return json_decode($result);
     }
 

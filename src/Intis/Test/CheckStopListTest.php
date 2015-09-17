@@ -39,7 +39,7 @@ class CheckStopListTest extends \PHPUnit_Framework_TestCase {
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
 
-        $phone = '79009009090';
+        $phone = '442073238000';
 
         $stopList = $client->checkStopList($phone);
         $stopList->getId();
@@ -56,7 +56,7 @@ class CheckStopListTest extends \PHPUnit_Framework_TestCase {
         $connector = new LocalApiConnector($this->getErrorData());
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = '79009009090';
+        $phone = '442073238000';
         $client->checkStopList($phone);
     }
 

@@ -37,7 +37,7 @@ class AddToStopListTest extends \PHPUnit_Framework_TestCase {
         $connector = new LocalApiConnector($this->getData());
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = '79009009090';
+        $phone = '442073238000';
 
         $result = $client->addToStopList($phone);
 
@@ -51,7 +51,7 @@ class AddToStopListTest extends \PHPUnit_Framework_TestCase {
         $connector = new LocalApiConnector($this->getErrorData());
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = '79009009090';
+        $phone = '442073238000';
 
         $result = $client->addToStopList($phone);
     }

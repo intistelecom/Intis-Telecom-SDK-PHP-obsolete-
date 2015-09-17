@@ -64,7 +64,7 @@ class IncomingMessagesTest extends \PHPUnit_Framework_TestCase {
     }
 
     private function getData(){
-        $result = '{"75396":{"date":"2015-04-01 14:01:24","sender":"79099004898","prefix":"","text":"TEST"},"75397":{"date":"2015-04-01 22:31:22","sender":"79033145252","prefix":"","text":"111111111"},"75398":{"date":"2015-04-01 22:37:13","sender":"79099004898","prefix":"","text":"TEST INCOMING"},"75399":{"date":"2015-04-01 22:39:33","sender":"79033145252","prefix":"","text":"2222223"}}';
+        $result = '{"75396":{"date":"2015-04-01 14:01:24","sender":"442073238000","prefix":"","text":"test1"},"75397":{"date":"2015-04-01 22:31:22","sender":"442073238001","prefix":"","text":"test 2"},"75398":{"date":"2015-04-01 22:37:13","sender":"442073238002","prefix":"","text":"test 3"},"75399":{"date":"2015-04-01 22:39:33","sender":"442073238003","prefix":"","text":"test 4"}}';
         return json_decode($result);
     }
 

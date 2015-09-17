@@ -37,7 +37,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase {
     public function test_getNetworkByPhone(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = '79808008080';
+        $phone = '442073238000';
         $network = $client->getNetworkByPhone($phone);
 
         $network->getTitle();
@@ -51,7 +51,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase {
     public function test_getNetworkByPhoneException(){
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = '79808008080';
+        $phone = '442073238000';
         $client->getNetworkByPhone($phone);
     }
 

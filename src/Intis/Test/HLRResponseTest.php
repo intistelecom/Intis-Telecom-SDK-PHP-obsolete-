@@ -37,10 +37,8 @@ class HLRResponseTest extends \PHPUnit_Framework_TestCase {
     public function test_makeHLRRequest(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = array('79009009090', '79009008080');
-        /*
-         * || $phone = '79009009090,79009008080';
-         */
+        $phone = array('442073238000', '442073238001');
+
         $result = $client->makeHLRRequest($phone);
 
         foreach ($result as $hlr) {
@@ -78,16 +76,14 @@ class HLRResponseTest extends \PHPUnit_Framework_TestCase {
     public function test_makeHLRRequestException(){
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
-        $phone = array('79009009090', '79009008080');
-        /*
-         * || $phone = '79009009090,79009008080';
-         */
+        $phone = array('442073238000', '442073238001');
+
         $result = $client->makeHLRRequest($phone);
     }
 
     private function getData(){
-        $result = '[{"id":"4133004490987800000001","destination":"79178880143","message_id":"x6ikubibd4y5ljdnttxt","IMSI":"250017224827276","stat":"DELIVRD","error":"0","orn":"MTS (Mobile TeleSystems)","pon":"MTS (Mobile TeleSystems)","ron":"MTS (Mobile TeleSystems)","mccmnc":"25001","rcn":"Russian Federation","ppm":"932","onp":"91788","ocn":"Russian Federation","ocp":"7","is_ported":"false","rnp":"917","rcp":"7","is_roaming":"false","pnp":"79872500000","pcn":"Russian Federation","pcp":"7","total_price":"0.2","request_id":"607a199fb7dc99e68af1196f659c23cf","request_time":"2014-10-14 19:27:29"},'.
-            '{"id":"4115440762085900000001","destination":"79371844901","message_id":"l9likizqtxau2e5gbbho","IMSI":"250017145699048","stat":"DELIVRD","error":"0","orn":"Megafon","pon":"MTS (Mobile TeleSystems)","ron":"MTS (Mobile TeleSystems)","mccmnc":"25001","rcn":"Russian Federation","ppm":"932","onp":"93718","ocn":"Russian Federation","ocp":"7","is_ported":"true","rnp":"91701","rcp":"7","is_roaming":"false","pnp":"79872500000","pcn":"Russian Federation","pcp":"7","total_price":"0.2","request_id":"79cdde57cea85f1cc2728f7c0d48f0bd","request_time":"2014-09-24 11:34:36"}]';
+        $result = '[{"id":"4133004490987800000001","destination":"442073238000","message_id":"x6ikubibd4y5ljdnttxt","IMSI":"250017224827276","stat":"DELIVRD","error":"0","orn":"Landline","pon":"Landline","ron":"Landline","mccmnc":"25001","rcn":"United Kingdom","ppm":"932","onp":"91788","ocn":"United Kingdom","ocp":"7","is_ported":"false","rnp":"917","rcp":"7","is_roaming":"false","pnp":"442073238000","pcn":"United Kingdom","pcp":"7","total_price":"0.2","request_id":"607a199fb7dc99e68af1196f659c23cf","request_time":"2014-10-14 19:27:29"},'.
+            '{"id":"4115440762085900000001","destination":"442073238001","message_id":"l9likizqtxau2e5gbbho","IMSI":"250017145699048","stat":"DELIVRD","error":"0","orn":"Landline","pon":"Landline","ron":"Landline","mccmnc":"25001","rcn":"United Kingdom","ppm":"932","onp":"93718","ocn":"United Kingdom","ocp":"7","is_ported":"true","rnp":"91701","rcp":"7","is_roaming":"false","pnp":"442073238001","pcn":"United Kingdom","pcp":"7","total_price":"0.2","request_id":"79cdde57cea85f1cc2728f7c0d48f0bd","request_time":"2014-09-24 11:34:36"}]';
         return json_decode($result);
     }
 
