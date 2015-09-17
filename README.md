@@ -83,7 +83,7 @@ foreach($originators as $originator){
 ```
 
 To get a list of phone numbers from a certain contact list you need the `getPhoneBaseItems($baseId, $page)` method. For your convenience, the entire list is split into separate pages.
-The parameters are: $baseId - the ID of a particular database (mandator), and $page - a page number in a particular database (optional).
+The parameters are: `$baseId` - the ID of a particular database (mandator), and `$page` - a page number in a particular database (optional).
 ```php
 $items = $client->getPhoneBaseItems($baseId, $page);
 
@@ -101,7 +101,7 @@ foreach($items as $item){
 }
 ```
 
-To receive status info for an SMS you have already sent, use the function `getDeliveryStatus($messageId)` where $messageId - is an array of sent message IDs.
+To receive status info for an SMS you have already sent, use the function `getDeliveryStatus($messageId)` where `$messageId` - is an array of sent message IDs.
 ```php
 $deliveryStatus = $client->getDeliveryStatus($messageId);
 
@@ -113,8 +113,8 @@ foreach($deliveryStatus as $message){
 ```
 
 To send a message (to one or several recipients), use the function `sendMessage($phone, $originator, $text)`,
-where ‘$phone’ - is a set of numbers you send your messages to,
-‘$originator’ is a sender’s name and ‘$text’ stands for the content of the message.
+where `$phone` - is a set of numbers you send your messages to,
+`$originator` is a sender’s name and `$text` stands for the content of the message.
 An array includes `MessageSendingSuccess` if the message was successfully sent or `MessageSendingError` in case of failure.
 ```php
 $messages = $client->sendMessage($phone, $originator, $text);
@@ -136,12 +136,12 @@ foreach($messages as $one){
 }
 ```
 
-To add a number to a stoplist run `addToStopList($phone)` where ‘$ phone’ is an individual phone number
+To add a number to a stoplist run `addToStopList($phone)` where `$phone` is an individual phone number
 ```php
 $id = $client->addToStopList($phone); // return ID in stop list
 ```
 
-To check if a particular phone number is listed within a stop list use the function `checkStopList($phone)`, where ‘$phone’ is an individual phone number.
+To check if a particular phone number is listed within a stop list use the function `checkStopList($phone)`, where `$phone` is an individual phone number.
 ```php
 $stopList = $client->checkStopList($phone);
 
@@ -162,12 +162,12 @@ foreach ($templates as $template) {
     $template->getCreatedAt(); // Getting the date and time when a particular template was created
 }
 ```
-To add a new template to a system run the function `addTemplate($title, $template)` where $‘title’ is a name of a template, and ‘$template’ is the text content of a template
+To add a new template to a system run the function `addTemplate($title, $template)` where `$title` is a name of a template, and `$template` is the text content of a template
 ```php
 $templteId = $client->addTemplate($title, $text); // return ID user template
 ```
 
-To get stats about messages you have sent during a particular month use the function `getDailyStatsByMonth($year, $month)` where ‘$year’ and $‘month’ - are the particular date you need statistics for.
+To get stats about messages you have sent during a particular month use the function `getDailyStatsByMonth($year, $month)` where `$year` and `$month` - are the particular date you need statistics for.
 ```php
 $result = $client->getDailyStatsByMonth($year, $month);
 
@@ -186,7 +186,7 @@ foreach($result as $one){
 
 HLR (Home Location Register) - is the centralised databas that provides detailed information regarding the GSM mobile network of every mobile user.
 HLR requests let you check the availability of a single phone number or a list of numbers for further clean up of unavailable numbers from a contact list.
-To perform an HLR request, our system supports the function `makeHLRRequest($phone)` where ‘$phone’ is the array of phone numbers.
+To perform an HLR request, our system supports the function `makeHLRRequest($phone)` where `$phone` is the array of phone numbers.
 ```php
 $result = $client->makeHLRRequest($phone);
 
@@ -214,7 +214,7 @@ foreach ($result as $hlr) {
     $hlr->isPorted();                 // Identification of ported number
 }
 ```
-Besides, you can can get HLR requests statistics regarding a certain time range. To do that,  use the function `getHlrStats($from, $to)` where ‘$from’ and ‘$to’ are the beginning and end of a time period.
+Besides, you can can get HLR requests statistics regarding a certain time range. To do that,  use the function `getHlrStats($from, $to)` where `$from` and `$to` are the beginning and end of a time period.
 ```php
 $result = $client->getHlrStats($from, $to);
 
@@ -248,7 +248,7 @@ foreach($result as $hlr){
     }
 ```
 
-To get information regarding which mobile network a certain phone number belongs to, use the function `getNetworkByPhone($phone)`, where ‘$phone’ is a phone number.
+To get information regarding which mobile network a certain phone number belongs to, use the function `getNetworkByPhone($phone)`, where `$phone` is a phone number.
 ```php
 $network = $client->getNetworkByPhone($phone);
 
@@ -257,7 +257,7 @@ $network->getTitle(); // Getting operator of subscriber
 
 Please bear in mind that this method has less accuracy than HLR requests as it uses our internal database to check which mobile operator a phone numbers belongs to.
 
-To get a list of incoming messages please use the function `getIncomingMessages($date)`, where ‘$date’ stands for a particular day in YYYY-mm-dd format.
+To get a list of incoming messages please use the function `getIncomingMessages($date)`, where `$date` stands for a particular day in YYYY-mm-dd format.
 ```php
 $result = $client->getIncomingMessages($date);
 
