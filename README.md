@@ -272,13 +272,13 @@ foreach($result as $one){
 
 Exapmles:
 ---------
-Send sms, balance, delivery [src/examples/send.php](src/examples/send.php)
-Phone bases [src/examples/base.php](src/examples/base.php)
-Phone bases items [src/examples/baseItems.php](src/examples/baseItems.php)
-Senders [src/examples/senders.php](src/examples/senders.php)
-Incoming messages [src/examples/incoming.php](src/examples/incoming.php)
-Get network by phone [src/examples/network.php](src/examples/network.php)
-Hlr requests and statistics [src/examples/hlr.php](src/examples/hlr.php)
-Statistics usage [src/examples/statistics.php](src/examples/statistics.php)
-Manage blocked phones [src/examples/stopList.php](src/examples/stopList.php)
-Manage templates [src/examples/template.php](src/examples/template.php)
+* Send sms, balance, delivery [src/examples/send.php](src/examples/send.php)
+* Phone bases [src/examples/base.php](src/examples/base.php)
+* Phone bases items [src/examples/baseItems.php](src/examples/baseItems.php)
+* Senders [src/examples/senders.php](src/examples/senders.php)
+* Incoming messages [src/examples/incoming.php](src/examples/incoming.php)
+* Get network by phone [src/examples/network.php](src/examples/network.php)
+* Hlr requests and statistics [src/examples/hlr.php](src/examples/hlr.php)
+* Statistics usage [src/examples/statistics.php](src/examples/statistics.php)
+* Manage blocked phones [src/examples/stopList.php](src/examples/stopList.php)
+* Manage templates [src/examples/template.php](src/examples/template.php)
