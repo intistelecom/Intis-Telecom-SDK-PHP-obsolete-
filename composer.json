@@ -2,7 +2,7 @@
     "name": "intis/sdk",
     "description": "SDK for SMS sending and getting API information",
     "keywords": ["sdk", "psr-4"],
-    "homepage": "git@github.com:intistelecom/Intis-Telecom-SDK-PHP.git",
+    "homepage": "https://github.com/intistelecom/Intis-Telecom-SDK-PHP",
     "type": "sdk",
     "license": "MIT",
     "require": {
