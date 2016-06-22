@@ -25,6 +25,7 @@
 namespace Intis\SDK;
 
 use Intis\SDK\Entity\Balance;
+use Intis\SDK\Entity\MessageSendingResult;
 use Intis\SDK\Entity\Originator;
 use Intis\SDK\Entity\PhoneBase;
 use Intis\SDK\Entity\PhoneBaseItem;
@@ -79,7 +80,7 @@ class IntisClient extends AClient implements IClient {
             parent::__construct(new HttpApiConnector());
         $this->login = $login;
         $this->apiKey = $apiKey;
-        $this->apiHost = $apiHost;
+        $this->apiHost = rtrim($apiHost, '/') . '/';
     }
 
     /**
@@ -104,7 +105,7 @@ class IntisClient extends AClient implements IClient {
      * Getting all user lists
      *
      * @throws PhoneBaseException
-     * @return array
+     * @return PhoneBase[]
      */
     public function getPhoneBases() {
         try {
@@ -126,7 +127,7 @@ class IntisClient extends AClient implements IClient {
      * Getting all user sender names
      *
      * @throws OriginatorException
-     * @return array array of senders with its statuses
+     * @return Originator[] array of senders with its statuses
      */
     public function getOriginators() {
         try {
@@ -151,7 +152,7 @@ class IntisClient extends AClient implements IClient {
      * @param int $page Page of list
      *
      * @throws PhoneBaseItemException
-     * @return array
+     * @return PhoneBaseItem[]
      */
     public function getPhoneBaseItems($baseId, $page = 1) {
         try {
@@ -175,7 +176,7 @@ class IntisClient extends AClient implements IClient {
      * @param int $messageId Message ID
      *
      * @throws DeliveryStatusException
-     * @return array
+     * @return DeliveryStatus[]
      */
     public function getDeliveryStatus($messageId) {
         try {
@@ -205,7 +206,7 @@ class IntisClient extends AClient implements IClient {
      * @param string $text sms text
      *
      * @throws MessageSendingResultException
-     * @return array
+     * @return MessageSendingResult[]
      */
     public function sendMessage($phone, $originator, $text) {
         try {
@@ -271,7 +272,7 @@ class IntisClient extends AClient implements IClient {
      * @param string $phone phone number
      *
      * @throws AddToStopListException
-     * @return mixed
+     * @return int|string
      */
     public function addToStopList($phone) {
         try {
@@ -288,7 +289,7 @@ class IntisClient extends AClient implements IClient {
      * Getting user templates
      *
      * @throws TemplateException
-     * @return array
+     * @return Template[]
      */
     public function getTemplates() {
         try {
@@ -313,7 +314,7 @@ class IntisClient extends AClient implements IClient {
      * @param string $template text of template
      *
      * @throws AddTemplateException
-     * @return mixed
+     * @return int|string
      */
     public function addTemplate($title, $template) {
         try {
@@ -333,7 +334,7 @@ class IntisClient extends AClient implements IClient {
      * @param string $month month
      *
      * @throws DailyStatsException
-     * @return array
+     * @return Stats[]
      */
     public function getDailyStatsByMonth($year, $month) {
         try {
@@ -364,7 +365,7 @@ class IntisClient extends AClient implements IClient {
      * @param array|string $phone phone number
      *
      * @throws HLRResponseException
-     * @return array
+     * @return HLRResponse[]
      */
     public function makeHLRRequest($phone){
         try {
@@ -392,7 +393,7 @@ class IntisClient extends AClient implements IClient {
      * @param string $to
      *
      * @throws HLRStatItemException
-     * @return array
+     * @return HLRStatItem[]
      */
     public function getHlrStats($from, $to) {
         try {
@@ -436,7 +437,7 @@ class IntisClient extends AClient implements IClient {
      * @param string $date date
      *
      * @throws IncomingMessageException
-     * @return array
+     * @return IncomingMessage[]
      */
     public function getIncomingMessages($date) {
         try {
