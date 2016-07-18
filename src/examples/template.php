@@ -30,3 +30,6 @@ foreach ($templates as $template) {
 
 $id = $client->addTemplate('Test', 'Test');
 echo sprintf("Add template: #%s", $id) . PHP_EOL;
+
+$remove = $client->removeTemplate('Test');
+echo sprintf("Remove template Test result: %s", $remove->getResult()) . PHP_EOL;
