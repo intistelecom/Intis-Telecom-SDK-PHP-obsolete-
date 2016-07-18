@@ -30,6 +30,7 @@ use Intis\SDK\Entity\Originator;
 use Intis\SDK\Entity\PhoneBase;
 use Intis\SDK\Entity\PhoneBaseItem;
 use Intis\SDK\Entity\DeliveryStatus;
+use Intis\SDK\Entity\RemoveTemplateResponse;
 use Intis\SDK\Entity\StopList;
 use Intis\SDK\Entity\MessageSending;
 use Intis\SDK\Entity\MessageSendingSuccess;
@@ -256,7 +257,7 @@ class IntisClient extends AClient implements IClient {
     public function checkStopList($phone) {
         try {
             $content = $this->getContent('find_on_stop', array('phone' => $phone));
-
+           
             $stopList = new StopList($content);
 
             return $stopList;
@@ -324,6 +325,24 @@ class IntisClient extends AClient implements IClient {
         }
         catch(\Exception $e){
             throw new AddTemplateException($e->getCode());
+        }
+    }
+
+    /**
+     * Deleting a user template
+     *
+     * @param $name
+     * @return RemoveTemplateResponse
+     * @throws IncomingMessageException
+     */
+    public function removeTemplate($name) {
+        try {
+            $content = $this->getContent('del_template', array('name' => $name));
+
+            return new RemoveTemplateResponse($content);
+        }
+        catch(\Exception $e){
+            throw new IncomingMessageException($e->getCode());
         }
     }
 
