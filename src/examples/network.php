@@ -14,7 +14,6 @@ $phone = '34675472924';
 
 $client = new IntisClient($login, $apiKey, $host);
 
-/** TODO отдает ошибку 0 и ответ */
 $result = $client->getNetworkByPhone($phone);
 
-sprintf("Phone: %s\nNetwork: %s", $phone, $result->getTitle()) . PHP_EOL;
+echo sprintf("Phone: %s\nNetwork: %s", $phone, $result->getTitle()) . PHP_EOL;

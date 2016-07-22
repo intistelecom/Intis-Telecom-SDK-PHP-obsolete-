@@ -37,21 +37,21 @@ interface IClient{
      *
      * @return Intis\SDK\Entity\Balance
      */
-    function getBalance();
+    public function getBalance();
     
     /**
      * Getting user lists
      *
      * @return Intis\SDK\Entity\PhoneBase[]
      */
-    function getPhoneBases();
+    public function getPhoneBases();
     
     /**
      * Getting user senders
      *
      * @return Intis\SDK\Entity\Originator[]
      */
-    function getOriginators();
+    public function getOriginators();
     
     /**
      * Getting subscribers of list
@@ -61,7 +61,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\PhoneBaseItem[]
      */
-    function getPhoneBaseItems($baseId, $page);
+    public function getPhoneBaseItems($baseId, $page);
     
     /**
      * Getting message status
@@ -70,7 +70,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\DeliveryStatus[]
      */
-    function getDeliveryStatus($messageId);
+    public function getDeliveryStatus($messageId);
     
     /**
      * SMS sending
@@ -81,7 +81,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\MessageSendingResult[]
      */
-    function sendMessage($phone, $originator, $text);
+    public function sendMessage($phone, $originator, $text);
     
     /**
      * Testing phone number for stop list
@@ -90,7 +90,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\StopList
      */
-    function checkStopList($phone);
+    public function checkStopList($phone);
     
     /**
      * Adding number to stop list
@@ -99,14 +99,14 @@ interface IClient{
      * 
      * @return integer
      */
-    function addToStopList($phone);
+    public function addToStopList($phone);
     
     /**
      * Getting user templates
      *
      * @return Intis\SDK\Entity\Template[]
      */
-    function getTemplates();
+    public function getTemplates();
     
     /**
      * Adding user template
@@ -116,7 +116,7 @@ interface IClient{
      * 
      * @return integer
      */
-    function addTemplate($title, $template);
+    public function addTemplate($title, $template);
     
     /**
      * Getting statistics for the certain month
@@ -126,7 +126,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\DailyStats[]
      */
-    function getDailyStatsByMonth($year, $month);
+    public function getDailyStatsByMonth($year, $month);
     
     /**
      * Make an HLR request for number
@@ -135,7 +135,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\HLRResponse[]
      */
-    function makeHLRRequest($phone);
+    public function makeHLRRequest($phone);
     
     /**
      * Getting statuses of HLR request
@@ -145,7 +145,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\HLRStatItem[]
      */
-    function getHlrStats($from, $to);
+    public function getHlrStats($from, $to);
     
     /**
      * Getting the operator of subscriber's phone number
@@ -154,7 +154,7 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\Network
      */
-    function getNetworkByPhone($phone);
+    public function getNetworkByPhone($phone);
     
     /**
      * Getting incoming messages of certain date
@@ -163,5 +163,5 @@ interface IClient{
      * 
      * @return Intis\SDK\Entity\IncomingMessage[]
      */
-    function getIncomingMessages($date);
+    public function getIncomingMessages($date);
 }

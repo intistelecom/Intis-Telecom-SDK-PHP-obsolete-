@@ -43,8 +43,6 @@ class HttpApiConnector implements IApiConnector
         if ($result === false)
             return false;
         $result = json_decode($result);
-        if (!$result)
-            return false;
 
         return $result;
     }

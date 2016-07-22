@@ -13,10 +13,12 @@ use Intis\SDK\IntisClient;
 $login = 'larissa44';
 $apiKey = '9e561cdea0ff5870fa1b920e63c09c42abe7cf0d';
 $host = 'https://go.intistele.com/external/get';
-$phones = ['34675472924', '442073238000'];
+$phones = [
+    '79033065950'
+];
 
 $client = new IntisClient($login, $apiKey, $host);
-/** TODO ошибка 000 */
+
 /** @var HLRResponse[] $results */
 $results = $client->makeHLRRequest($phones);
 echo sprintf(
@@ -55,7 +57,7 @@ foreach ($results as $item) {
 
 echo PHP_EOL;
 
-/** TODO ошибка 000 */
+
 $date = new DateTime('now', new DateTimeZone('UTC'));
 $from = $date->format('Y-m-01');
 $to = $date->format('Y-m-d');

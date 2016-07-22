@@ -15,8 +15,7 @@ $phone = '33333333333';
 
 $client = new IntisClient($login, $apiKey, $host);
 
-/** TODO возвращает ошибку Empty results на любой номер */
-if ($client->checkStopList($phone)) {
+if ($client->checkStopList($phone)->getId()) {
     echo sprintf('phone %s already blocked', $phone) . PHP_EOL;
     exit(1);
 }
