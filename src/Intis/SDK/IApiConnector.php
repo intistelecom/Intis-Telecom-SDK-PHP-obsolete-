@@ -36,12 +36,12 @@ interface IApiConnector {
      *
      * @param $link - URL by API method
      */
-    function getContentFromApi($link);
+    public function getContentFromApi($link);
 
     /**
      * Getting timestamp from API.
      *
      * @param $link - URL by API method
      */
-    function getTimestampFromApi($link);
+    public function getTimestampFromApi($link);
 }

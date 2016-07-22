@@ -137,7 +137,7 @@ abstract class AClient {
      * @throws SDKException
      */
     private function checkException($result) {
-        if (!$result)
+        if ($result === false)
             throw new SDKException(0);
 
         if (isset($result->error))
