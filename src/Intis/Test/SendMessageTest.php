@@ -62,6 +62,34 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Intis\SDK\Entity\MessageSendingResult',$first);
     }
 
+    public function test_sheduleSendMessage(){
+        $connector = new LocalApiConnector($this->getData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
+        $phone = array('442073238000','442073238001');
+
+        $originator = "smstest";
+        $text = "test message";
+        $messages = $client->sendMessage($phone, $originator, $text, '2016-08-08 12:15');
+
+        foreach($messages as $one){
+            if($one->isOk()) {
+                $one->getPhone();
+                $one->getMessageId();
+                $one->getCost();
+                $one->getMessagesCount();
+            }
+            else{
+                $one->getMessage();
+                $one->getCode();
+            }
+
+        }
+
+        $this->assertInternalType('array',$messages);
+        $first = $messages[0];
+        $this->assertInstanceOf('Intis\SDK\Entity\MessageSendingResult',$first);
+    }
+
     /**
      * @expectedException Intis\SDK\Exception\MessageSendingResultException
      */

@@ -53,6 +53,26 @@ class IncomingMessagesTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Intis\SDK\Entity\IncomingMessage',$first);
     }
 
+    public function test_getIncomingMessagesForPeriod(){
+        $connector = new LocalApiConnector($this->getData());
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
+        $from = '2015-04-01 00:00:00';
+        $to = '2015-04-01 23:00:00';
+        $result = $client->getIncomingMessages($from, $to);
+
+        foreach($result as $one){
+            $one->getMessageId();
+            $one->getOriginator();
+            $one->getPrefix();
+            $one->getReceivedAt();
+            $one->getText();
+        }
+
+        $this->assertInternalType('array',$result);
+        $first = $result[0];
+        $this->assertInstanceOf('Intis\SDK\Entity\IncomingMessage',$first);
+    }
+
     /**
      * @expectedException Intis\SDK\Exception\IncomingMessageException
      */

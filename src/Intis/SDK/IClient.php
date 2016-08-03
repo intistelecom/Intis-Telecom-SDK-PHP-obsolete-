@@ -78,10 +78,11 @@ interface IClient{
      * @param string|array $phone phone number(s)
      * @param string $originator sender name
      * @param string $text sms text
-     * 
+     * @param string $sendingTime an optional parameter, it is used when it is necessary to schedule SMS messages. Format YYYY-MM-DD HH:ii
+     *
      * @return Intis\SDK\Entity\MessageSendingResult[]
      */
-    public function sendMessage($phone, $originator, $text);
+    public function sendMessage($phone, $originator, $text, $sendingTime = null);
     
     /**
      * Testing phone number for stop list
@@ -117,7 +118,17 @@ interface IClient{
      * @return integer
      */
     public function addTemplate($title, $template);
-    
+
+    /**
+     * Edit user template
+     *
+     * @param string $title template name
+     * @param string $template text of template
+     *
+     * @return int|string
+     */
+    public function editTemplate($title, $template);
+
     /**
      * Getting statistics for the certain month
      *
@@ -157,11 +168,12 @@ interface IClient{
     public function getNetworkByPhone($phone);
     
     /**
-     * Getting incoming messages of certain date
+     * Getting incoming messages of certain date | for the period
      *
-     * @param string $date date
-     * 
+     * @param string $date date in the format YYYY-MM-DD | initial date in the format YYYY-MM-DD HH:II:SS
+     * @param string $toDate finel date in the format YYYY-MM-DD HH:II:SS
+     *
      * @return Intis\SDK\Entity\IncomingMessage[]
      */
-    public function getIncomingMessages($date);
+    public function getIncomingMessages($date, $toDate);
 }

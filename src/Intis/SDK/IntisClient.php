@@ -205,17 +205,22 @@ class IntisClient extends AClient implements IClient {
      * @param array|string $phone phone number(s)
      * @param string $originator sender name
      * @param string $text sms text
+     * @param string $sendingTime an optional parameter, it is used when it is necessary to schedule SMS messages. Format YYYY-MM-DD HH:ii
      *
      * @throws MessageSendingResultException
      * @return MessageSendingResult[]
      */
-    public function sendMessage($phone, $originator, $text) {
+    public function sendMessage($phone, $originator, $text, $sendingTime = null) {
         try {
             if (!is_array($phone))
                 $phone = array($phone);
             $str = implode(',', $phone);
 
-            $content = $this->getContent('send', array('phone' => $str, 'sender' => $originator, 'text' => $text));
+            $parameters = array('phone' => $str, 'sender' => $originator, 'text' => $text);
+            if($sendingTime)
+                $parameters['sendingTime'] = $sendingTime;
+
+            $content = $this->getContent('send', $parameters);
 
             $messages = array();
             foreach ($content as $phoneResult => $message) {
@@ -320,6 +325,26 @@ class IntisClient extends AClient implements IClient {
     public function addTemplate($title, $template) {
         try {
             $content = $this->getContent('add_template', array('name' => $title, 'text' => $template));
+
+            return $content->id;
+        }
+        catch(\Exception $e){
+            throw new AddTemplateException($e->getCode());
+        }
+    }
+
+    /**
+     * Edit user template
+     *
+     * @param string $title template name
+     * @param string $template text of template
+     *
+     * @throws AddTemplateException
+     * @return int|string
+     */
+    public function editTemplate($title, $template) {
+        try {
+            $content = $this->getContent('add_template', array('name' => $title, 'text' => $template, 'override' => 1));
 
             return $content->id;
         }
@@ -451,16 +476,20 @@ class IntisClient extends AClient implements IClient {
     }
 
     /**
-     * Getting incoming messages of certain date
+     * Getting incoming messages of certain date | for the period
      *
-     * @param string $date date
+     * @param string $date date in the format YYYY-MM-DD | initial date in the format YYYY-MM-DD HH:II:SS
+     * @param string $toDate finel date in the format YYYY-MM-DD HH:II:SS
      *
      * @throws IncomingMessageException
      * @return IncomingMessage[]
      */
-    public function getIncomingMessages($date) {
+    public function getIncomingMessages($date, $toDate = null) {
         try {
-            $content = $this->getContent('incoming', array('date' => $date));
+            if($toDate == null)
+                $content = $this->getContent('incoming', array('date' => $date));
+            else
+                $content = $this->getContent('incoming', array('from' => $date, 'to' => $toDate));
 
             $messages = array();
             foreach ($content as $key => $one) {

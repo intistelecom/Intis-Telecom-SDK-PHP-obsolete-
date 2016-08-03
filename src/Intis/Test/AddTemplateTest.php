@@ -43,6 +43,14 @@ class AddTemplateTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotEquals(0, $templteId);
     }
 
+    public function test_editTemplate(){
+        $connector = new LocalApiConnector($this->getData());
+
+        $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
+        $templteId = $client->editTemplate("testPHP3", "template for testPHP1");
+        $this->assertNotEquals(0, $templteId);
+    }
+
     /**
      * @expectedException Intis\SDK\Exception\AddTemplateException
      */
