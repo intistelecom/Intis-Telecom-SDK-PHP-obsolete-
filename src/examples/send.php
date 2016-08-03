@@ -10,14 +10,15 @@ use Intis\SDK\Entity\MessageSendingResult;
 use Intis\SDK\Entity\MessageSendingSuccess;
 use Intis\SDK\IntisClient;
 
-$login = 'larissa44';
-$apiKey = '9e561cdea0ff5870fa1b920e63c09c42abe7cf0d';
+$login = 'your login';
+$apiKey = 'your key';
 $host = 'https://go.intistele.com/external/get';
+$phone = 'phone number';
 
 $client = new IntisClient($login, $apiKey, $host);
 
 /** @var MessageSendingResult[] $results */
-$results = $client->sendMessage(['34675472924'], 'smstest', 'Hello!');
+$results = $client->sendMessage([$phone], 'smstest', 'Hello!');
 if (!count($results) or !$results[0]->isOk()) {
     echo 'Error: ' . isset($results[0]) ? $results[0]->getMessage() : 'not sent';
     exit(0);

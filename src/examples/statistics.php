@@ -9,8 +9,8 @@ use Intis\SDK\Entity\DailyStats;
 use Intis\SDK\Entity\Stats;
 use Intis\SDK\IntisClient;
 
-$login = 'larissa44';
-$apiKey = '9e561cdea0ff5870fa1b920e63c09c42abe7cf0d';
+$login = 'your login';
+$apiKey = 'your key';
 $host = 'https://go.intistele.com/external/get';
 
 $date = new DateTime('now', new DateTimeZone('UTC'));
