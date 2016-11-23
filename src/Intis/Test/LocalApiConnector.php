@@ -39,6 +39,6 @@ class LocalApiConnector implements IApiConnector{
     }
 
     public function getTimestampFromApi($link){
-        return null;
+        return time();
     }
 }

@@ -54,6 +54,6 @@ class HttpApiConnector implements IApiConnector
      * @return bool|mixed|string
      */
     public function getTimestampFromApi($link){
-        return file_get_contents($link);
+        return time();
     }
 }
