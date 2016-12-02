@@ -51,6 +51,11 @@ class IncomingMessage{
      * @var string Text of message
      */
     private $text;
+
+    /**
+     * @var string
+     */
+    private $destination;
     
     public function __construct($messageId, $obj) {
         $this->messageId = $messageId;
@@ -58,6 +63,16 @@ class IncomingMessage{
         $this->originator = $obj->sender;
         $this->prefix = $obj->prefix;
         $this->text = $obj->text;
+        $this->destination = $obj->phone;
+    }
+
+    /**
+     * Getting destination
+     *
+     * @return string
+     */
+    public function getDestination() {
+        return $this->destination;
     }
 
     /**

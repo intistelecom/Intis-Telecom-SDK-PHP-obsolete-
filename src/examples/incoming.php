@@ -18,14 +18,15 @@ $client = new IntisClient($login, $apiKey, $host);
 /** @var IncomingMessage[] $results */
 $results = $client->getIncomingMessages($date->format('Y-m-d'));
 
-echo sprintf('%-10s %-10s %-10s %-10s %-10s', 'Id', 'Received at', 'Originator', 'Prefix', 'Text') . PHP_EOL;
+echo sprintf('%-10s %-10s %-10s %-10s %-10s %-10s', 'Id', 'Received at', 'Originator', 'Prefix', 'Text', 'Destination') . PHP_EOL;
 foreach ($results as $message) {
     echo sprintf(
-        '%-10s %-10s %-10s %-10s %-10s',
+        '%-10s %-10s %-10s %-10s %-10s %-10s',
         $message->getMessageId(),
         $message->getReceivedAt(),
         $message->getOriginator(),
         $message->getPrefix(),
-        $message->getText()
+        $message->getText(),
+        $message->getDestination()
     ) . PHP_EOL;
 }
