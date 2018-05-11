@@ -35,18 +35,80 @@ class Network{
      * @var string Name of operator
      */
     private $title;
+
+    /**
+     * @var string
+     */
+    private $currency;
+
+    /**
+     * @var float
+     */
+    private $price;
+
+    /**
+     * @var string Name of country
+     */
+    private $country;
+
+    /**
+     * @var string Mobile Country Code
+     */
+    private $mcc;
+
+    /**
+     * @var string Mobile Network Code
+     */
+    private $mnc;
     
     function __construct($obj) {
         $this->title = $obj->operator;
+        $this->price = $obj->price;
+        $this->currency = $obj->currency;
+        $this->country = $obj->country;
+        $this->mcc = $obj->mcc;
+        $this->mnc = $obj->mnc;
     }
     
     /**
-     * Getting operator of subscriber
-     *
      * @return string
      */
     public function getTitle(){
         return $this->title;
     }
 
+    /**
+     * @return string
+     */
+    public function getCurrency(){
+        return $this->currency;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice(){
+        return $this->price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry(){
+        return $this->country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMcc(){
+        return $this->mcc;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMnc(){
+        return $this->mnc;
+    }
 }

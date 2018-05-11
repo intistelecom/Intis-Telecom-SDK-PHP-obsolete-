@@ -16,4 +16,4 @@ $client = new IntisClient($login, $apiKey, $host);
 
 $result = $client->getNetworkByPhone($phone);
 
-echo sprintf("Phone: %s\nNetwork: %s", $phone, $result->getTitle()) . PHP_EOL;
+echo sprintf("Phone: %s\nNetwork: %s\nPrice: %g %s", $phone, $result->getTitle(), $result->getPrice(), $result->getCurrency()) . PHP_EOL;

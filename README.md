@@ -24,7 +24,7 @@ To begin using our API please [apply](https://go.intistele.com/external/client/r
 Install
 ---------------------------
 ```bash
-composer require "intis/sdk: dev-master"
+composer require "intis/sdk: ~1.0.0"
 ```
 
 Usage

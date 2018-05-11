@@ -56,7 +56,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase {
     }
 
     private function getData(){
-        $result = '{"operator" : "AT&T"}';
+        $result = '{"currency": "USD","operator": "AT&T","phone": "442073238000","price": 0.65}';
         return json_decode($result);
     }
 
