@@ -24,7 +24,7 @@
  */
 namespace Intis\SDK\Entity;
 
-use Intis\SDK\Exception\SDKException;
+use Intis\SDK\Exception\SDKResponseException;
 
 /**
  * Class MessageSendingError
@@ -71,6 +71,6 @@ class MessageSendingError extends MessageSendingResult
      */
     public function getMessage()
     {
-        return SDKException::$messages[$this->code];
+        return SDKResponseException::$messages[$this->code];
     }
 }

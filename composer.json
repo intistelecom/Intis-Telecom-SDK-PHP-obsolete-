@@ -6,8 +6,9 @@
     "type": "sdk",
     "license": "MIT",
     "require": {
-        "php": ">=7.0",
-        "ext-json": "*"
+        "php": ">=7.2",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.2"
     },
     "autoload": {
         "psr-4": {

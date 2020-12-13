@@ -24,7 +24,9 @@
  */
 namespace Intis\SDK;
 
-use Intis\SDK\Exception\SDKException;
+use GuzzleHttp\Exception\GuzzleException;
+use Intis\SDK\Exception\SDKTransferException;
+use Intis\SDK\Exception\SDKResponseException;
 /**
  * Class AClient
  * The main class for working with API
@@ -67,7 +69,13 @@ abstract class AClient {
         $all = $this->getParameters($parameters);
 
         $url = $this->apiHost . $scriptName . ".php?" . http_build_query($all);
-        $result = $this->apiConnector->getContentFromApi($url);
+
+        try {
+            $result = $this->apiConnector->getContentFromApi($url);
+        } catch (GuzzleException $e) {
+            throw new SDKTransferException($e->getMessage(), $e->getCode(), $e);
+        }
+
         $this->checkException($result);
 
         return $result;
@@ -134,14 +142,13 @@ abstract class AClient {
      * Testing for special exceptions and error output
      *
      * @param bool|mixed|string $result API response
-     * @throws SDKException
+     * @throws SDKResponseException
      */
     private function checkException($result) {
         if ($result === false)
-            throw new SDKException(0);
+            throw new SDKResponseException(0);
 
         if (isset($result->error))
-            throw new SDKException($result->error);
+            throw new SDKResponseException($result->error);
     }
-
 }

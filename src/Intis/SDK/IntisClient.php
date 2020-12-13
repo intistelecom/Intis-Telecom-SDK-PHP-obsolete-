@@ -24,6 +24,7 @@
  */
 namespace Intis\SDK;
 
+use GuzzleHttp\Client;
 use Intis\SDK\Entity\Balance;
 use Intis\SDK\Entity\MessageSendingResult;
 use Intis\SDK\Entity\Originator;
@@ -75,10 +76,11 @@ class IntisClient extends AClient implements IClient {
      * @param IApiConnector $apiConnector
      */
     public function __construct($login, $apiKey, $apiHost, IApiConnector $apiConnector = null) {
-        if($apiConnector)
+        if($apiConnector) {
             parent::__construct($apiConnector);
-        else
-            parent::__construct(new HttpApiConnector());
+        } else {
+            parent::__construct(new HttpApiConnector(new Client()));
+        }
         $this->login = $login;
         $this->apiKey = $apiKey;
         $this->apiHost = rtrim($apiHost, '/') . '/';
