@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\OriginatorException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class OriginatorsTest extends \PHPUnit_Framework_TestCase {
+class OriginatorsTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getOriginators
+     */
     public function test_getOriginators(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -44,15 +46,16 @@ class OriginatorsTest extends \PHPUnit_Framework_TestCase {
             $originator->getState();
         }
 
-        $this->assertInternalType('array',$originators);
+        $this->assertIsArray($originators);
         $first = $originators[0];
         $this->assertInstanceOf('Intis\SDK\Entity\Originator',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\OriginatorException
+     * @covers \Intis\SDK\IntisClient::getOriginators
      */
     public function test_getOriginatorsException(){
+        $this->expectException(OriginatorException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $client->getOriginators();

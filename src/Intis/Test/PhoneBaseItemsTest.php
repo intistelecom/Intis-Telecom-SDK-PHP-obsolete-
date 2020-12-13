@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require_once  __DIR__.'/../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\PhoneBaseItemException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class PhoneBaseItemsTest extends \PHPUnit_Framework_TestCase {
+class PhoneBaseItemsTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getPhoneBaseItems
+     */
     public function test_getPhoneBaseItems(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -54,15 +56,16 @@ class PhoneBaseItemsTest extends \PHPUnit_Framework_TestCase {
             $item->getNote2();
         }
 
-        $this->assertInternalType('array',$items);
+        $this->assertIsArray($items);
         $first = $items[0];
         $this->assertInstanceOf('Intis\SDK\Entity\PhoneBaseItem',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\PhoneBaseItemException
+     * @covers \Intis\SDK\IntisClient::getPhoneBaseItems
      */
     public function test_getPhoneBaseItemsException(){
+        $this->expectException(PhoneBaseItemException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
 

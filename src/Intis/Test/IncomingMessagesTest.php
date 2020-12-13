@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\IncomingMessageException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class IncomingMessagesTest extends \PHPUnit_Framework_TestCase {
+class IncomingMessagesTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getIncomingMessages
+     */
     public function test_getIncomingMessages(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -48,11 +50,14 @@ class IncomingMessagesTest extends \PHPUnit_Framework_TestCase {
             $one->getText();
         }
 
-        $this->assertInternalType('array',$result);
+        $this->assertIsArray($result);
         $first = $result[0];
         $this->assertInstanceOf('Intis\SDK\Entity\IncomingMessage',$first);
     }
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getIncomingMessages
+     */
     public function test_getIncomingMessagesForPeriod(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -68,15 +73,16 @@ class IncomingMessagesTest extends \PHPUnit_Framework_TestCase {
             $one->getText();
         }
 
-        $this->assertInternalType('array',$result);
+        $this->assertIsArray($result);
         $first = $result[0];
         $this->assertInstanceOf('Intis\SDK\Entity\IncomingMessage',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\IncomingMessageException
+     * @covers \Intis\SDK\IntisClient::getIncomingMessages
      */
     public function test_getIncomingMessagesException(){
+        $this->expectException(IncomingMessageException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $date = '2014-11-25';

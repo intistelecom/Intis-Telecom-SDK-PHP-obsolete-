@@ -25,16 +25,18 @@
 
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\AddTemplateException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-class AddTemplateTest extends \PHPUnit_Framework_TestCase {
+class AddTemplateTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
-
+    /**
+     * @covers \Intis\SDK\IntisClient::addTemplate
+     */
     public function test_addTemplate(){
         $connector = new LocalApiConnector($this->getData());
 
@@ -43,6 +45,9 @@ class AddTemplateTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotEquals(0, $templteId);
     }
 
+    /**
+     * @covers \Intis\SDK\IntisClient::editTemplate
+     */
     public function test_editTemplate(){
         $connector = new LocalApiConnector($this->getData());
 
@@ -52,9 +57,11 @@ class AddTemplateTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\AddTemplateException
+     * @covers \Intis\SDK\IntisClient::addTemplate
      */
     public function test_addTemplateException(){
+        $this->expectException(AddTemplateException::class);
+
         $connector = new LocalApiConnector($this->getErrorData());
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);

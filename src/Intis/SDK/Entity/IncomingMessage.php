@@ -63,7 +63,7 @@ class IncomingMessage{
         $this->originator = $obj->sender;
         $this->prefix = $obj->prefix;
         $this->text = $obj->text;
-        $this->destination = $obj->phone;
+        $this->destination = $obj->phone ?? null;
     }
 
     /**

@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\NetworkException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class NetworkTest extends \PHPUnit_Framework_TestCase {
+class NetworkTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getNetworkByPhone
+     */
     public function test_getNetworkByPhone(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -46,9 +48,10 @@ class NetworkTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\NetworkException
+     * @covers \Intis\SDK\IntisClient::getNetworkByPhone
      */
     public function test_getNetworkByPhoneException(){
+        $this->expectException(NetworkException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $phone = '442073238000';

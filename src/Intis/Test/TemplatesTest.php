@@ -24,19 +24,18 @@
  */
 namespace Intis\Test;
 
-require_once  __DIR__.'/../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\TemplateException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class TemplatesTest
- * @package Intis\Test
- */
-class TemplatesTest extends \PHPUnit_Framework_TestCase{
+class TemplatesTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getTemplates
+     */
     public function test_getTemplates(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -50,15 +49,16 @@ class TemplatesTest extends \PHPUnit_Framework_TestCase{
             $template->getCreatedAt();
         }
 
-        $this->assertInternalType('array', $templates);
+        $this->assertIsArray( $templates);
         $first = $templates[0];
         $this->assertInstanceOf('Intis\SDK\Entity\Template', $first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\TemplateException
+     * @covers \Intis\SDK\IntisClient::getTemplates
      */
     public function test_getTemplatesException(){
+        $this->expectException(TemplateException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
 

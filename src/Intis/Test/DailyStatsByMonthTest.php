@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\DailyStatsException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class DailyStatsByMonthTest extends \PHPUnit_Framework_TestCase {
+class DailyStatsByMonthTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getDailyStatsByMonth
+     */
     public function test_getDailyStatsByMonth(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -52,15 +54,16 @@ class DailyStatsByMonthTest extends \PHPUnit_Framework_TestCase {
             }
         }
 
-        $this->assertInternalType('array',$result);
+        $this->assertIsArray($result);
         $first = $result[0];
         $this->assertInstanceOf('Intis\SDK\Entity\DailyStats',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\DailyStatsException
+     * @covers \Intis\SDK\IntisClient::getDailyStatsByMonth
      */
     public function test_getDailyStatsByMonthException(){
+        $this->expectException(DailyStatsException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $year = 2014;

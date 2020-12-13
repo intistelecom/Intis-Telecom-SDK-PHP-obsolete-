@@ -30,7 +30,7 @@ namespace Intis\SDK\Entity;
  *
  * @package Intis\SDK\Entity
  */
-class Balance{
+class Balance {
     /**
      * @var float amount of money
      */

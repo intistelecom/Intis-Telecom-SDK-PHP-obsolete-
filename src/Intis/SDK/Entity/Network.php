@@ -62,12 +62,12 @@ class Network{
     private $mnc;
     
     function __construct($obj) {
-        $this->title = $obj->operator;
-        $this->price = $obj->price;
-        $this->currency = $obj->currency;
-        $this->country = $obj->country;
-        $this->mcc = $obj->mcc;
-        $this->mnc = $obj->mnc;
+        $this->title = $obj->operator ?? null;
+        $this->price = $obj->price ?? null;
+        $this->currency = $obj->currency ?? null;
+        $this->country = $obj->country ?? null;
+        $this->mcc = $obj->mcc ?? null;
+        $this->mnc = $obj->mnc ?? null;
     }
     
     /**
