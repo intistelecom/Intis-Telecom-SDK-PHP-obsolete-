@@ -8,11 +8,16 @@ git:
   depth: 3
 
 php:
-  - '7.3'
+  - '7.2.5'
   - '7.4.1'
+  - '8.0.0'
+
+env:
+  - GUZZLE_VERSION="6.5.5"
+  - GUZZLE_VERSION="7.2"
 
 install:
-  - composer install
+  - composer install guzzlehttp/guzzle:${GUZZLE_VERSION}
 
 script:
   - ./vendor/bin/phpunit
