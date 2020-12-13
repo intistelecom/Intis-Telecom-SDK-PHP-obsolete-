@@ -17,7 +17,7 @@ env:
   - GUZZLE_VERSION="7.2"
 
 install:
-  - composer install guzzlehttp/guzzle:${GUZZLE_VERSION}
+  - composer require guzzlehttp/guzzle:${GUZZLE_VERSION}
 
 script:
   - ./vendor/bin/phpunit
