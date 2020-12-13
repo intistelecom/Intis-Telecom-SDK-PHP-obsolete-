@@ -178,7 +178,7 @@ class IntisClient extends AClient implements IClient
     /**
      * Getting message status
      *
-     * @param int $messageId Message ID
+     * @param int|int[] $messageId Message ID
      *
      * @return DeliveryStatus[]
      * @throws DeliveryStatusException
