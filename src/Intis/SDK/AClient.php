@@ -154,7 +154,7 @@ abstract class AClient
      */
     private function checkException($result)
     {
-        if ($result === false) {
+        if ($result === null) {
             throw new SDKResponseException(0);
         }
 

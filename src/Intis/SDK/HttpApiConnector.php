@@ -49,7 +49,7 @@ class HttpApiConnector implements IApiConnector
      * Getting data from API.
      *
      * @param string $link API address
-     * @return bool|mixed|string
+     * @return ?object
      * @throws GuzzleException
      */
     public function getContentFromApi($link){
@@ -58,9 +58,6 @@ class HttpApiConnector implements IApiConnector
             ->getBody()
             ->getContents()
         ;
-
-        if ($result === false)
-            return false;
 
         return json_decode($result);
     }
