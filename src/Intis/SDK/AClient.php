@@ -25,6 +25,7 @@
 namespace Intis\SDK;
 
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\TransferException;
 use Intis\SDK\Exception\SDKTransferException;
 use Intis\SDK\Exception\SDKResponseException;
 /**
@@ -72,7 +73,7 @@ abstract class AClient {
 
         try {
             $result = $this->apiConnector->getContentFromApi($url);
-        } catch (GuzzleException $e) {
+        } catch (TransferException $e) {
             throw new SDKTransferException($e->getMessage(), $e->getCode(), $e);
         }
 
