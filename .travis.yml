@@ -8,13 +8,11 @@ git:
   depth: 3
 
 php:
-  - '7.2'
   - '7.3'
   - '7.4.1'
 
 install:
   - composer install
-  - ./vendor/bin/simple-phpunit install
 
 script:
   - ./vendor/bin/phpunit
