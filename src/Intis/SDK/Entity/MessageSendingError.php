@@ -47,7 +47,7 @@ class MessageSendingError extends MessageSendingResult
     /**
      * Getting code error in SMS sending
      *
-     * @return integer
+     * @return int
      */
     public function getCode()
     {
@@ -57,7 +57,7 @@ class MessageSendingError extends MessageSendingResult
     /**
      * Setting code error
      *
-     * @param integer $code - Code error
+     * @param int $code - Code error
      */
     public function setCode($code)
     {

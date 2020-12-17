@@ -465,9 +465,7 @@ class IntisClient extends AClient implements IClient
         try {
             $content = $this->getContent('operator', array('phone' => $phone));
 
-            $network = new Network($content);
-
-            return $network;
+            return new Network($content);
         } catch (SDKResponseException $e) {
             throw new NetworkException($e->getCode());
         }

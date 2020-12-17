@@ -49,10 +49,11 @@ class HttpApiConnector implements IApiConnector
      * Getting data from API.
      *
      * @param string $link API address
-     * @return ?object
+     * @return mixed ?object
      * @throws GuzzleException
      */
-    public function getContentFromApi($link){
+    public function getContentFromApi($link)
+    {
         $result = $this->client
             ->request('GET', $link)
             ->getBody()
@@ -68,7 +69,8 @@ class HttpApiConnector implements IApiConnector
      * @param string $link API address
      * @return bool|mixed|string
      */
-    public function getTimestampFromApi($link){
+    public function getTimestampFromApi($link)
+    {
         return time();
     }
 }

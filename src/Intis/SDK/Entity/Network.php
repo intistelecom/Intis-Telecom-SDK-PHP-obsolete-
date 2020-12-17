@@ -30,7 +30,8 @@ namespace Intis\SDK\Entity;
  *
  * @package Intis\SDK\Entity
  */
-class Network{
+class Network
+{
     /**
      * @var string Name of operator
      */
@@ -61,7 +62,8 @@ class Network{
      */
     private $mnc;
     
-    function __construct($obj) {
+    public function __construct($obj)
+    {
         $this->title = $obj->operator ?? null;
         $this->price = $obj->price ?? null;
         $this->currency = $obj->currency ?? null;
@@ -73,42 +75,48 @@ class Network{
     /**
      * @return string
      */
-    public function getTitle(){
+    public function getTitle()
+    {
         return $this->title;
     }
 
     /**
      * @return string
      */
-    public function getCurrency(){
+    public function getCurrency()
+    {
         return $this->currency;
     }
 
     /**
      * @return float
      */
-    public function getPrice(){
+    public function getPrice()
+    {
         return $this->price;
     }
 
     /**
      * @return string
      */
-    public function getCountry(){
+    public function getCountry()
+    {
         return $this->country;
     }
 
     /**
      * @return string
      */
-    public function getMcc(){
+    public function getMcc()
+    {
         return $this->mcc;
     }
 
     /**
      * @return string
      */
-    public function getMnc(){
+    public function getMnc()
+    {
         return $this->mnc;
     }
 }

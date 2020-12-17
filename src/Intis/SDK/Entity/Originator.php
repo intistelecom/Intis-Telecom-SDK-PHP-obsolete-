@@ -30,7 +30,8 @@ namespace Intis\SDK\Entity;
  *
  * @package Intis\SDK\Entity
  */
-class Originator{
+class Originator
+{
     /**
      * @var string Sender name
      */
@@ -40,7 +41,8 @@ class Originator{
      */
     private $state;
     
-    public function __construct($originator, $state) {
+    public function __construct($originator, $state)
+    {
         $this->originator = $originator;
         $this->state = $state;
     }
@@ -50,17 +52,18 @@ class Originator{
      *
      * @return string
      */
-    public function getOriginator() {
+    public function getOriginator()
+    {
         return $this->originator;
     }
 
     /**
      * Getting sender status
      *
-     * @return integer
+     * @return int
      */
-    public function getState() {
+    public function getState()
+    {
         return OriginatorState::parse($this->state);
     }
 }
-

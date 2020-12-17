@@ -30,8 +30,8 @@ namespace Intis\SDK\Entity;
  *
  * @package Intis\SDK\Entity
  */
-class MessageState {
-
+class MessageState
+{
     /**
      * @const Constant for scheduled message
      */
@@ -77,9 +77,10 @@ class MessageState {
      * Analysis of the string of message status
      *
      * @param string $state message status
-     * @return type
+     * @return int|null
      */
-    public static function parse($state) {
+    public static function parse($state): ?int
+    {
         switch ($state) {
             case 'deliver':
                 return self::DELIVERED;
