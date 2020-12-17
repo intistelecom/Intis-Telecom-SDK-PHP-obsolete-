@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\HLRResponseException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class HLRResponseTest extends \PHPUnit_Framework_TestCase {
+class HLRResponseTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::makeHLRRequest
+     */
     public function test_makeHLRRequest(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -65,15 +67,16 @@ class HLRResponseTest extends \PHPUnit_Framework_TestCase {
             $hlr->isPorted();
         }
 
-        $this->assertInternalType('array',$result);
+        $this->assertIsArray($result);
         $first = $result[0];
         $this->assertInstanceOf('Intis\SDK\Entity\HLRResponse',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\HLRResponseException
+     * @covers \Intis\SDK\IntisClient::makeHLRRequest
      */
     public function test_makeHLRRequestException(){
+        $this->expectException(HLRResponseException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $phone = array('442073238000', '442073238001');

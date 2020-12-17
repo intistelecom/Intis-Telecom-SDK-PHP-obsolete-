@@ -1,0 +1,22 @@
+language: php
+
+os: linux
+
+dist: xenial
+
+git:
+  depth: 3
+
+php:
+  - '7.4.1'
+  - '8.0.0'
+
+env:
+  - GUZZLE_VERSION="6.5.5"
+  - GUZZLE_VERSION="7.2"
+
+install:
+  - composer require guzzlehttp/guzzle:${GUZZLE_VERSION}
+
+script:
+  - ./vendor/bin/phpunit

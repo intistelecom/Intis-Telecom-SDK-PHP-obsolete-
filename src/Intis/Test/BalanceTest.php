@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\BalanceException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class BalanceTest extends \PHPUnit_Framework_TestCase {
+class BalanceTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getBalance
+     */
     public function test_getBalance(){
         $connector = new LocalApiConnector($this->getData());
 
@@ -43,13 +45,14 @@ class BalanceTest extends \PHPUnit_Framework_TestCase {
         $amount = $balance->getAmount();
         $currency = $balance->getCurrency();
 
-        $this->assertInstanceOf('Intis\SDK\Entity\Balance',$balance);
+        $this->assertInstanceOf('Intis\SDK\Entity\Balance', $balance);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\BalanceException
+     * @covers \Intis\SDK\IntisClient::getBalance
      */
     public function test_getBalanceException(){
+        $this->expectException(BalanceException::class);
         $connector = new LocalApiConnector($this->getErrorData());
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);

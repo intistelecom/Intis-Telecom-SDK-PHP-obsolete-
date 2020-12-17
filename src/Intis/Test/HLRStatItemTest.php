@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\HLRStatItemException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class HLRStatItemTest extends \PHPUnit_Framework_TestCase {
+class HLRStatItemTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getHlrStats
+     */
     public function test_getHlrStats(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -70,15 +72,16 @@ class HLRStatItemTest extends \PHPUnit_Framework_TestCase {
             $hlr->getRequestTime();
         }
 
-        $this->assertInternalType('array',$result);
+        $this->assertIsArray($result);
         $first = $result[0];
         $this->assertInstanceOf('Intis\SDK\Entity\HLRStatItem',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\HLRStatItemException
+     * @covers \Intis\SDK\IntisClient::makeHLRRequest
      */
     public function test_getHlrStatsException(){
+        $this->expectException(HLRStatItemException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $from = '2014-07-01';

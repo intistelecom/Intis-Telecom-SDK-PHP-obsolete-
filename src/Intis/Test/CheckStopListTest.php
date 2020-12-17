@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\StopListException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class CheckStopListTest extends \PHPUnit_Framework_TestCase {
+class CheckStopListTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::checkStopList
+     */
     public function test_checkStopList(){
         $connector = new LocalApiConnector($this->getData());
 
@@ -50,9 +52,10 @@ class CheckStopListTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\StopListException
+     * @covers \Intis\SDK\IntisClient::checkStopList
      */
     public function test_checkStopListException(){
+        $this->expectException(StopListException::class);
         $connector = new LocalApiConnector($this->getErrorData());
 
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);

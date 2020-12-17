@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\DeliveryStatusException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class DeliveryStatusTest extends \PHPUnit_Framework_TestCase {
+class DeliveryStatusTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::getDeliveryStatus
+     */
     public function test_getDeliveryStatus(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -48,15 +50,16 @@ class DeliveryStatusTest extends \PHPUnit_Framework_TestCase {
             $message->getCreatedAt();
         }
 
-        $this->assertInternalType('array',$deliveryStatus);
+        $this->assertIsArray($deliveryStatus);
         $first = $deliveryStatus[0];
         $this->assertInstanceOf('Intis\SDK\Entity\DeliveryStatus',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\DeliveryStatusException
+     * @covers \Intis\SDK\IntisClient::getDeliveryStatus
      */
     public function test_getDeliveryStatusException(){
+        $this->expectException(DeliveryStatusException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $messageId = array('4385937961543210880001', '4385937961543210880002');

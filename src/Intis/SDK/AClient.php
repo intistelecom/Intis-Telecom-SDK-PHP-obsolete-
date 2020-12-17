@@ -22,17 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace Intis\SDK;
 
-use Intis\SDK\Exception\SDKException;
+use GuzzleHttp\Exception\TransferException;
+use Intis\SDK\Exception\SDKResponseException;
+use Intis\SDK\Exception\SDKTransferException;
+
 /**
  * Class AClient
  * The main class for working with API
  *
  * @package Intis\SDK
  */
-abstract class AClient {
-
+abstract class AClient
+{
     /**
      * @var string User´s login
      */
@@ -49,25 +53,33 @@ abstract class AClient {
     /**
      * @var IApiConnector API data connector
      */
-    protected  $apiConnector;
+    protected $apiConnector;
 
-    public function __construct(IApiConnector $apiConnector){
-         $this->apiConnector = $apiConnector;
+    public function __construct(IApiConnector $apiConnector)
+    {
+        $this->apiConnector = $apiConnector;
     }
 
     /**
      * Getting content using parameters and name of API script
      *
      * @param string $scriptName Name of API script
-     * @param array $parameters[] array of parameters
-     * 
+     * @param array $parameters [] array of parameters
+     *
      * @return \stdClass returns the data as an object
      */
-    public function getContent($scriptName, $parameters = array()) {
+    public function getContent($scriptName, $parameters = [])
+    {
         $all = $this->getParameters($parameters);
 
         $url = $this->apiHost . $scriptName . ".php?" . http_build_query($all);
-        $result = $this->apiConnector->getContentFromApi($url);
+
+        try {
+            $result = $this->apiConnector->getContentFromApi($url);
+        } catch (TransferException $e) {
+            throw new SDKTransferException($e->getMessage(), $e->getCode(), $e);
+        }
+
         $this->checkException($result);
 
         return $result;
@@ -78,22 +90,24 @@ abstract class AClient {
      *
      * @return string
      */
-    private function getTimestamp() {
+    private function getTimestamp()
+    {
         $url = $this->apiHost . 'timestamp.php';
         return $this->apiConnector->getTimestampFromApi($url);
     }
 
     /**
-     * Getting basic API parameters 
+     * Getting basic API parameters
      *
      * @return array
      */
-    private function getBaseParameters() {
-        return array(
-            'login' => $this->login,
+    private function getBaseParameters()
+    {
+        return [
+            'login'     => $this->login,
             'timestamp' => $this->getTimestamp(),
-            'return' => 'json'
-        );
+            'return'    => 'json'
+        ];
     }
 
     /**
@@ -103,7 +117,8 @@ abstract class AClient {
      * @param array $more
      * @return array
      */
-    private function getParameters(array $more = array()) {
+    private function getParameters(array $more = [])
+    {
         $params = $this->getBaseParameters();
         if ($more) {
             foreach ($more as $key => $value) {
@@ -122,7 +137,8 @@ abstract class AClient {
      * @param array $params array of parameters
      * @return string returns the signature line
      */
-    private function getSignature($params) {
+    private function getSignature($params)
+    {
         ksort($params);
         reset($params);
         $str = implode('', $params) . $this->apiKey;
@@ -134,14 +150,16 @@ abstract class AClient {
      * Testing for special exceptions and error output
      *
      * @param bool|mixed|string $result API response
-     * @throws SDKException
+     * @throws SDKResponseException
      */
-    private function checkException($result) {
-        if ($result === false)
-            throw new SDKException(0);
+    private function checkException($result)
+    {
+        if ($result === null) {
+            throw new SDKResponseException(0);
+        }
 
-        if (isset($result->error))
-            throw new SDKException($result->error);
+        if (isset($result->error)) {
+            throw new SDKResponseException($result->error);
+        }
     }
-
 }

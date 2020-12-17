@@ -30,7 +30,8 @@ namespace Intis\SDK;
  *
  * @package Intis\SDK
  */
-interface IApiConnector {
+interface IApiConnector
+{
     /**
      * Getting data from API.
      *

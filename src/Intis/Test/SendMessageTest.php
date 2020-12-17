@@ -24,16 +24,18 @@
  */
 namespace Intis\Test;
 
-require  '../../../vendor/autoload.php';
-
+use Intis\SDK\Exception\MessageSendingResultException;
 use Intis\SDK\IntisClient;
+use PHPUnit\Framework\TestCase;
 
-
-class SendMessageTest extends \PHPUnit_Framework_TestCase {
+class SendMessageTest extends TestCase {
     private $login = 'your api login';
     private $apiKey = 'your api key here';
     private $apiHost = 'http://api.host.com/get/';
 
+    /**
+     * @covers \Intis\SDK\IntisClient::sendMessage
+     */
     public function test_sendMessage(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -57,11 +59,14 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
 
         }
 
-        $this->assertInternalType('array',$messages);
+        $this->assertIsArray($messages);
         $first = $messages[0];
         $this->assertInstanceOf('Intis\SDK\Entity\MessageSendingResult',$first);
     }
 
+    /**
+     * @covers \Intis\SDK\IntisClient::sendMessage
+     */
     public function test_sheduleSendMessage(){
         $connector = new LocalApiConnector($this->getData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
@@ -85,15 +90,16 @@ class SendMessageTest extends \PHPUnit_Framework_TestCase {
 
         }
 
-        $this->assertInternalType('array',$messages);
+        $this->assertIsArray($messages);
         $first = $messages[0];
         $this->assertInstanceOf('Intis\SDK\Entity\MessageSendingResult',$first);
     }
 
     /**
-     * @expectedException Intis\SDK\Exception\MessageSendingResultException
+     * @covers \Intis\SDK\IntisClient::sendMessage
      */
     public function test_sendMessageException(){
+        $this->expectException(MessageSendingResultException::class);
         $connector = new LocalApiConnector($this->getErrorData());
         $client = new IntisClient($this->login, $this->apiKey, $this->apiHost, $connector);
         $phone = array('442073238000','442073238001');

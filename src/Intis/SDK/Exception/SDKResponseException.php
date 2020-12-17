@@ -28,9 +28,12 @@ namespace Intis\SDK\Exception;
  * Class SDKException
  * Class of testing and getting an error from array
  *
+ * Happens when response from API comes with error info.
+ *
  * @package Intis\SDK
  */
-class SDKException extends \Exception{
+class SDKResponseException extends \RuntimeException implements ExceptionInterface
+{
     /**
      * @var array Array of error codes and test equivalents
      */
@@ -73,7 +76,8 @@ class SDKException extends \Exception{
         35 => "Billing failed"
     );
 
-    public function __construct($code){
-        parent::__construct(self::$messages[$code], $code);
+    public function __construct($code)
+    {
+        parent::__construct(self::$messages[$code] ?? 'undefined exception', $code);
     }
 }

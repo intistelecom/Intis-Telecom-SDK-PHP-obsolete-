@@ -24,6 +24,9 @@
  */
 namespace Intis\SDK;
 
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+
 /**
  * Class HttpApiConnector
  * HTTP API data connector implementation API data connector
@@ -33,18 +36,31 @@ namespace Intis\SDK;
 class HttpApiConnector implements IApiConnector
 {
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    public function __construct(ClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
      * Getting data from API.
      *
      * @param string $link API address
-     * @return bool|mixed|string
+     * @return mixed ?object
+     * @throws GuzzleException
      */
-    public function getContentFromApi($link){
-        $result = file_get_contents($link);
-        if ($result === false)
-            return false;
-        $result = json_decode($result);
+    public function getContentFromApi($link)
+    {
+        $result = $this->client
+            ->request('GET', $link)
+            ->getBody()
+            ->getContents()
+        ;
 
-        return $result;
+        return json_decode($result);
     }
 
     /**
@@ -53,7 +69,8 @@ class HttpApiConnector implements IApiConnector
      * @param string $link API address
      * @return bool|mixed|string
      */
-    public function getTimestampFromApi($link){
+    public function getTimestampFromApi($link)
+    {
         return time();
     }
 }

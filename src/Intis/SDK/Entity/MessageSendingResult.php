@@ -38,7 +38,7 @@ class MessageSendingResult
     private $phone;
 
     /**
-     * @var boolean Success result
+     * @var bool Success result
      */
     private $isOk;
 
@@ -55,7 +55,7 @@ class MessageSendingResult
     /**
      * If key is ok
      *
-     * @return boolean
+     * @return bool
      */
     public function isOk()
     {
@@ -63,7 +63,7 @@ class MessageSendingResult
     }
 
     /**
-     * @param phone - Phone number
+     * @param string phone - Phone number
      */
     public function setPhone($phone)
     {
@@ -73,7 +73,7 @@ class MessageSendingResult
     /**
      * Setting success result
      *
-     * @param boolean $isOk
+     * @param bool $isOk
      */
     public function setIsOk($isOk)
     {

@@ -24,6 +24,20 @@
  */
 namespace Intis\SDK;
 
+use Intis\SDK\Entity\Balance;
+use Intis\SDK\Entity\DailyStats;
+use Intis\SDK\Entity\DeliveryStatus;
+use Intis\SDK\Entity\HLRResponse;
+use Intis\SDK\Entity\HLRStatItem;
+use Intis\SDK\Entity\IncomingMessage;
+use Intis\SDK\Entity\MessageSendingResult;
+use Intis\SDK\Entity\Network;
+use Intis\SDK\Entity\Originator;
+use Intis\SDK\Entity\PhoneBase;
+use Intis\SDK\Entity\PhoneBaseItem;
+use Intis\SDK\Entity\StopList;
+use Intis\SDK\Entity\Template;
+
 /**
  * Interface IClient
  * Class with methods of receiving SDK information
@@ -35,21 +49,21 @@ interface IClient{
     /**
      * Getting user balance
      *
-     * @return Intis\SDK\Entity\Balance
+     * @return Balance
      */
     public function getBalance();
     
     /**
      * Getting user lists
      *
-     * @return Intis\SDK\Entity\PhoneBase[]
+     * @return PhoneBase[]
      */
     public function getPhoneBases();
     
     /**
      * Getting user senders
      *
-     * @return Intis\SDK\Entity\Originator[]
+     * @return Originator[]
      */
     public function getOriginators();
     
@@ -59,16 +73,16 @@ interface IClient{
      * @param integer $baseId List ID
      * @param integer $page Page of list
      * 
-     * @return Intis\SDK\Entity\PhoneBaseItem[]
+     * @return PhoneBaseItem[]
      */
     public function getPhoneBaseItems($baseId, $page);
     
     /**
      * Getting message status
      *
-     * @param integer $messageId Message ID
+     * @param int|int[] $messageId Message ID
      * 
-     * @return Intis\SDK\Entity\DeliveryStatus[]
+     * @return DeliveryStatus[]
      */
     public function getDeliveryStatus($messageId);
     
@@ -80,7 +94,7 @@ interface IClient{
      * @param string $text sms text
      * @param string $sendingTime an optional parameter, it is used when it is necessary to schedule SMS messages. Format YYYY-MM-DD HH:ii
      *
-     * @return Intis\SDK\Entity\MessageSendingResult[]
+     * @return MessageSendingResult[]
      */
     public function sendMessage($phone, $originator, $text, $sendingTime = null);
     
@@ -89,7 +103,7 @@ interface IClient{
      *
      * @param string $phone Phone number
      * 
-     * @return Intis\SDK\Entity\StopList
+     * @return StopList
      */
     public function checkStopList($phone);
     
@@ -105,7 +119,7 @@ interface IClient{
     /**
      * Getting user templates
      *
-     * @return Intis\SDK\Entity\Template[]
+     * @return Template[]
      */
     public function getTemplates();
     
@@ -135,7 +149,7 @@ interface IClient{
      * @param string $year year
      * @param string $month month
      * 
-     * @return Intis\SDK\Entity\DailyStats[]
+     * @return DailyStats[]
      */
     public function getDailyStatsByMonth($year, $month);
     
@@ -144,7 +158,7 @@ interface IClient{
      *
      * @param string|array $phone phone number(s)
      * 
-     * @return Intis\SDK\Entity\HLRResponse[]
+     * @return HLRResponse[]
      */
     public function makeHLRRequest($phone);
     
@@ -154,7 +168,7 @@ interface IClient{
      * @param string $from
      * @param string $to
      * 
-     * @return Intis\SDK\Entity\HLRStatItem[]
+     * @return HLRStatItem[]
      */
     public function getHlrStats($from, $to);
     
@@ -163,7 +177,7 @@ interface IClient{
      *
      * @param string $phone Phone number
      * 
-     * @return Intis\SDK\Entity\Network
+     * @return Network
      */
     public function getNetworkByPhone($phone);
     
@@ -173,7 +187,7 @@ interface IClient{
      * @param string $date date in the format YYYY-MM-DD | initial date in the format YYYY-MM-DD HH:II:SS
      * @param string $toDate finel date in the format YYYY-MM-DD HH:II:SS
      *
-     * @return Intis\SDK\Entity\IncomingMessage[]
+     * @return IncomingMessage[]
      */
     public function getIncomingMessages($date, $toDate);
 }

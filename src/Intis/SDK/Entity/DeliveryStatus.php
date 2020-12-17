@@ -30,7 +30,8 @@ namespace Intis\SDK\Entity;
  *
  * @package Intis\SDK\Entity
  */
-class DeliveryStatus{
+class DeliveryStatus
+{
     /**
      * @var integer Message ID
      */
@@ -45,7 +46,8 @@ class DeliveryStatus{
      */
     private $createdAt;
     
-    public function __construct($messageId, $obj) {
+    public function __construct($messageId, $obj)
+    {
         $this->messageId = $messageId;
         $this->messageStatus = $obj->status;
         $this->createdAt = $obj->time;
@@ -54,18 +56,20 @@ class DeliveryStatus{
     /**
      * Getting message ID
      *
-     * @return integer
+     * @return int
      */
-    public function getMessageId() {
+    public function getMessageId()
+    {
         return $this->messageId;
     }
 
     /**
      * Getting a message status
      *
-     * @return integer
+     * @return int
      */
-    public function getMessageStatus() {
+    public function getMessageStatus()
+    {
         return MessageState::parse($this->messageStatus);
     }
 
@@ -74,7 +78,8 @@ class DeliveryStatus{
      *
      * @return string
      */
-    public function getCreatedAt(){
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 }

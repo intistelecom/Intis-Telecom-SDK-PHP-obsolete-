@@ -45,7 +45,7 @@ class MessageSendingSuccess extends MessageSendingResult
      */
     private $currency;
     /**
-     * @var integer number of message parts
+     * @var int number of message parts
      */
     private $messagesCount;
 
@@ -127,7 +127,7 @@ class MessageSendingSuccess extends MessageSendingResult
     /**
      * Setting number of message parts
      *
-     * @param integer $messagesCount - Number of message parts
+     * @param int $messagesCount - Number of message parts
      */
     public function setMessagesCount($messagesCount)
     {
